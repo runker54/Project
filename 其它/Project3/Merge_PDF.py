@@ -23,29 +23,24 @@ def MergePDF(filepath, outfile):
     output = PdfFileWriter()
     outputPages = 0
     pdf_fileName = getFileName(filepath)
-
     if pdf_fileName:
         for pdf_file in pdf_fileName:
             print("路径：%s" % pdf_file)
-
             # 读取源PDF文件
-            input = PdfFileReader(open(pdf_file, "rb"))
+            input1 = PdfFileReader(open(pdf_file, "rb"))
             # 获得源PDF文件中页面总数
-            pageCount = input.getNumPages()
+            pageCount = input1.getNumPages()
             outputPages += pageCount
             print("页数：%d" % pageCount)
-
             # 分别将page添加到输出output中
             for iPage in range(pageCount):
-                output.addPage(input.getPage(iPage))
-
+                output.addPage(input1.getPage(iPage))
         print("合并后的总页数:%d." % outputPages)
         # 写入到目标PDF文件
         outputStream = open(os.path.join(filepath, outfile), "wb")
         output.write(outputStream)
         outputStream.close()
         print("PDF文件合并完成！")
-
     else:
         print("没有可以合并的PDF文件！")
 
@@ -61,5 +56,6 @@ def main():
         MergePDF(file_dir, outfile)
         time2 = time.time()
         print('总共耗时：%s s.' % (time2 - time1))
+
 
 main()
