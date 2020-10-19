@@ -13,15 +13,15 @@ start_time = time.clock()
 
 print('开始时间：%s' % start_time)
 
-data = r"F:\台账\种植表汇总统计\纳雍县\连接CHANGE.gdb\T总数据_merge_20200902_Dissolve_修改乡镇名称"  # 数据路径
-path = "C:/Users/65680/Desktop/ZZZ/"  # 保存位置
+data = r"E:\台账\大方县\T大方DATA.gdb\T大方县20201001merge_dissolve"  # 数据路径
+path = "C:/Users/65680/Desktop/DFX"  # 保存位置
 
 data_list = []
 data_list1 = []
 xc_list = []
 
 with arcpy.da.SearchCursor(data, ['LBBM', 'FXZQMC', 'TXZQMC', 'XZQMC', 'ZXLON', 'ZXLAT', 'ZLLB', 'CQCS',
-                                  'SUM_SUM_MJ_MU']) as cursor:
+                                  'SUM_MJ_MU']) as cursor:
     for row in cursor:
         data_list.append(row[0])
         list1 = [row[0], row[1], row[2], row[2] + row[3], round(row[4], 6), round(row[5], 6), row[6], row[7], row[8]]
@@ -135,7 +135,7 @@ for data_sys in Max_LIST:
     ws.write(r, 26, xlwt.Formula('SUM(H%s:Y%s)' % (r + 1, r + 1)), style_4)
     r = r + 1
 
-workbook.save('%s/NYX20200902_dissolve.xls' % path)
+workbook.save('%s/DFX_20201001_dissolve.xls' % path)
 
 end_time = time.clock()
 times = end_time - start_time

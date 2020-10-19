@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-#
 # -------------------------------------------------------------------------------
-# Author:       A
+# Author:       runker
 # Date:         2020-09-09
 # -------------------------------------------------------------------------------
 import os
+import time
 import re
 import xlrd
 from docx import Document
@@ -24,7 +25,7 @@ def get_file(*args):
     print(len(pdf_dir))
 
 
-# 执行调查表PDF转图片
+# 调查表PDF转图片
 def conver_img(*args):
     for pdf in pdf_dir:
         doc = fitz.open(pdf)
@@ -83,9 +84,9 @@ def doc_(*args):
     zzjgtz = message[21].value
     paragraph_neirong = document.add_paragraph()
     run5 = paragraph_neirong.add_run(
-        f"  编号{bianhao}地块位于{qx}{xz}{xzc},地块中心坐标：东经{lon},北纬{lat},质量类别为{zllb},总任务面积{rwmj},经现场调查后，"
-        f"该地块2019年种植情况为，玉米品种：{ym19pz}共 {ym19area:.1s} 亩，水稻品种：{sd19pz}共 {sd19area:.1s} 亩，其它主要作物为：{qt19}，"
-        f"2020年种植情况为,玉米品种：{ym20pz}共 {ym20area:.1s} 亩，水稻品种：{sd20pz}共 {sd20area:.1s} 亩，其它主要作物为：{qt20}。")
+        f"  编号{bianhao}地块位于{qx}{xz}{xzc},地块中心坐标：东经{lon},北纬{lat},质量类别为{zllb},总任务面积{rwmj}亩,经现场调查后，"
+        f"该地块2019年种植情况为，玉米品种：{ym19pz}，共{ym19area} 亩，水稻品种：{sd19pz}，共{sd19area} 亩，其它主要作物为：{qt19}，"
+        f"2020年种植情况为,玉米品种：{ym20pz}，共{ym20area} 亩，水稻品种：{sd20pz}，共{sd20area} 亩，其它主要作物为：{qt20}。")
     paragraph_qingkuang = document.add_paragraph()
     document.add_paragraph()
     run1 = paragraph_qingkuang.add_run(
@@ -96,7 +97,7 @@ def doc_(*args):
     run2 = paragraph_shuoming.add_run("特此说明：")
     document.add_paragraph()
     paragraph_shiti = document.add_paragraph()
-    run3 = paragraph_shiti.add_run(f"%s{xzc}人民政府" % ((" ") * 38))
+    run3 = paragraph_shiti.add_run("%s责任单位（盖章）：" % ((" ") * 37))
     document.add_paragraph()
     paragraph_shijian = document.add_paragraph()
     run4 = paragraph_shijian.add_run("%s   年    月    日" % ((" ") * 36))
@@ -132,7 +133,7 @@ def pingmianbuzhitu(*args):
     page_h, page_w = section.page_width, section.page_height
     section.page_width = page_w
     section.page_height = page_h
-    document.add_picture("%s" % tupia_dict.get(message[0].value), width=shared.Cm(21))
+    document.add_picture("%s" % tupia_dict.get(message[0].value), width=shared.Cm(25),height=shared.Cm(18))
     document.add_page_break()
     section = document.add_section(start_type=WD_SECTION_START.CONTINUOUS)
     section.orientation = WD_ORIENTATION.PORTRAIT  # 设置纵向（还原，为插入文档做准备）
@@ -143,40 +144,89 @@ def pingmianbuzhitu(*args):
 
 # 写入调查表
 def diaochabiao(**args):
-    document.add_picture("%s" % diaochabiao_dict.get(message[0].value), width=shared.Cm(15))  # 写入调查表
+    title = document.add_heading('', 1)
+    title1 = title.add_run(f'{message[0].value}')
+    title1.font.color.rgb = RGBColor(250, 250, 250)
+    document.add_picture("%s" % diaochabiao_dict.get(message[0].value), width=shared.Cm(19), height=shared.Cm(23))   # 写入调查表
 
 
-sheet_path = r"C:\Users\65680\Desktop\MTX20200908_dissolve.xls"  # 表格位置
-pingmiantu_path = r"C:\Users\65680\Desktop\MTX_pictures"  # 平面图位置
-xianchangtu_path = r""  # 现场图位置
-diaochabiao_path = r"C:\Users\65680\Desktop\MTX_PDF"  # 调查表位置
+# 写入现场图片
+def xianchang_pictures(*args):
+    try:
+        for pictures_xc in os.listdir(xctp_dict.get(*args)):
+            in_pictures_xc = os.path.join(xctp_dict.get(*args), pictures_xc)
+            document.add_picture("%s" % in_pictures_xc, height=shared.Cm(12), width=shared.Cm(18))  # 写入现场图片
+    except:
+        print("无该地块照片")
+
+
+def dikuai_shuoming(*args):
+    document.add_picture("%s" % shuoming_dict.get(message[0].value), width=shared.Cm(19), height=shared.Cm(25))  # 写入地块说明
+
+
+sheet_path = r"C:\Users\65680\Desktop\高台镇.xls"  # 表格位置
+pingmiantu_path = r"C:\Users\65680\Desktop\高台镇\高台镇平面布置图"  # 平面图位置
+xianchangtu_path = r"C:\Users\65680\Desktop\高台镇\高台镇现场图片"  # 现场图位置
+diaochabiao_path = r"C:\Users\65680\Desktop\高台镇\调查表"  # 调查表位置
+dikuaishuoming_path = r"C:\Users\65680\Desktop\高台镇\情况说明表"  # 情况说明表位置
 
 pdf_dir = []
 # get_file(diaochabiao_path)  # 获取调查表PDF
 # conver_img()  # 执行PDF转图片
 diaochabiao_dict = {}
-for roots, dirs, files in os.walk(diaochabiao_path):   # 收集全部调查表图片到字典
+for roots, dirs, files in os.walk(diaochabiao_path):  # 收集全部调查表图片到字典
     for one_file in files:
         if str(one_file).endswith("jpg"):
             dk_key = re.findall(r"5\d{11}", str(one_file))[0]
             diaochabiao_dict[dk_key] = os.path.join(roots, one_file)
 tupia_dict = {}
-for roots, dirs, files in os.walk(pingmiantu_path):   # 收集全部平面布置图到字典
+for roots, dirs, files in os.walk(pingmiantu_path):  # 收集全部平面布置图到字典
     for one_file in files:
         if str(one_file).endswith("jpg"):
             dk_key = re.findall(r"5\d{11}", str(one_file))[0]
             tupia_dict[dk_key] = os.path.join(roots, one_file)
-document = Document()  # 创建空文档
+xctp_dict = {} # 获取地块编码对应现场图片路径
+for xctp_dir in os.listdir(xianchangtu_path):
+    print("")
+    xctp_dict[xctp_dir] = os.path.join(xianchangtu_path, xctp_dir)
+shuoming_dict = {}
+for roots, dirs, files in os.walk(dikuaishuoming_path):
+    for one_file in files:
+        if str(one_file).endswith("jpg"):
+            dk_key = re.findall(r"5\d{11}", str(one_file))[0]
+            shuoming_dict[dk_key] = os.path.join(roots, one_file)
 work_book = xlrd.open_workbook(sheet_path)  # 打开工作薄
-work_sheet = work_book.sheet_by_index(1)  # 打开表格
+work_sheet = work_book.sheet_by_index(0)  # 打开表格
 
-for one_row in range(1, 10):   # 逐一写入各个地块情况及资料
-    message = work_sheet.row(one_row)   # 每个地块的信息
+xz_list = []
+message_list = []
+for one_row in range(1, work_sheet.nrows):  # 逐一写入各个地块情况及资料
 
-    doc_(message)  # 写入地块说明
+    message1 = work_sheet.row(one_row)  # 每个地块的信息
+    message_list.append(message1)
+    xz_list.append(message1[2].value)
+    xz_list = list(set(xz_list))
+print(xz_list)
+time.sleep(5)
+for one_xz in xz_list:
+    document = Document()  # 创建空文档
+    one_message_list = list(filter(lambda x: x[2].value == one_xz, message_list))
+    time.sleep(5)
+    one_message_list.sort(key=lambda x: x[3].value)
+    for message in one_message_list:
+        pass
+        print(message)
 
-    diaochabiao()  # 写入调查表
+        diaochabiao()  # 写入调查表
 
-    pingmianbuzhitu()  # 写入平面布置图
+        dikuai_shuoming()  # 写入地块说明
 
-doc_().save(r'C:\Users\65680\Desktop\RIOCE\TEST.docx')
+        # doc_(message)  # 写入地块说明
+
+        pingmianbuzhitu()  # 写入平面布置图
+
+        xianchang_pictures(message[0].value)  # 写入现场图片
+
+    doc_().save(r'C:\Users\65680\Desktop\DICK\%s111.docx' % one_xz)
+    print(one_xz)
+    time.sleep(3)

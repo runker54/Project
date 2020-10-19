@@ -49,10 +49,10 @@ def MergePDF(filepath, outfile):
 def main():
     time1 = time.time()
 
-    path_ = r"C:\Users\65680\Desktop\织金县\test"
+    path_ = r"E:\台账\大方县\大方县导出资料\DFX_PDF"
     for path_1 in os.listdir(path_):
         file_dir = os.path.join(path_, path_1)
-        outfile = "C:/Users/65680/Desktop/ddd/%s.pdf" % path_1  # 输出的PDF文件的名称
+        outfile = r"E:\台账\大方县\大方县导出资料\DFX_PDF_MERGE\%s.pdf" % path_1  # 输出的PDF文件的名称
         MergePDF(file_dir, outfile)
         time2 = time.time()
         print('总共耗时：%s s.' % (time2 - time1))

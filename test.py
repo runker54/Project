@@ -1,32 +1,31 @@
-# coding: utf-8
+# coding:utf-8
+# import os
+# rename_path = r"C:\Users\65680\Desktop\BT_XCTP\佐证图片"
+# list_dir = os.listdir(rename_path)
+# for one_dir in list_dir:
+#     old_dir = os.path.join(rename_path, one_dir)
+#     new_dir = os.path.join(rename_path, "520328000"+str(one_dir))
+#     os.rename(old_dir, new_dir)
+#     print(f"{old_dir}已更名为{new_dir}")
+import os
+import shutil
+import re
 import time
-
-import xlrd
 import xlwt
-
-data_path = r'C:\Users\65680\Desktop\表-09 综合单价分析表2010.xls'
-old_work = xlrd.open_workbook(data_path)
-old_sheet = old_work.sheet_by_index(0)
-rows = old_sheet.nrows
-columns = old_sheet.ncols
-
-new_work_book = xlwt.Workbook(encoding='utf-8')
-ws = new_work_book.add_sheet('Data')
-r = 1
-for _r in range(2, rows, 11):
-    xmbm = old_sheet.row(_r)[2].value
-    debh = old_sheet.row(_r + 4)[0].value
-    zmmc = old_sheet.row(_r + 4)[1].value
-    dw = old_sheet.row(_r + 4)[2].value
-    sl = old_sheet.row(_r + 4)[3].value
-    rgf = old_sheet.row(_r + 4)[4].value
-    clf = old_sheet.row(_r + 4)[5].value
-    jxf = old_sheet.row(_r + 4)[6].value
-    glf = old_sheet.row(_r + 4)[8].value
-    lr = old_sheet.row(_r + 4)[13].value
-    zhdj = old_sheet.row(_r + 7)[9].value
-    list1 = [xmbm, debh, zmmc, dw, sl, rgf, clf, jxf, glf, lr, zhdj]
-    for _x in range(len(list1)):
-        ws.write(r, _x+1, list1[_x])
-    r = r+1
-new_work_book.save(r'C:\Users\65680\Desktop\xxx1.xls')
+# work_book = xlwt.Workbook('utf-8')
+# work_sheet = work_book.add_sheet("data")
+# data_path = r'G:\1台账导出文档基础资料\思南县台账\思南县调查表\思南县调查表cut'
+# r = 1
+# for roots, dirs, files in os.walk(data_path):
+#     for file in files:
+#         file_name = file[:12]
+#         work_sheet.write(r,0,file_name)
+#         r+=1
+#         print(file_name)
+# work_book.save(r'C:\Users\65680\Desktop\新建文件夹\对比.xls')
+i = 1
+list1 = []
+while True:
+    i += 1
+    list1.append(i)
+    print(i)

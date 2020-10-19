@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
-# Time:2020/4/17
+# Time:2020/9/9
 import os
 import xlrd
 import win32com
@@ -82,6 +82,7 @@ def save(self):
 def save_as(self, filename):
     """文档另存为"""
     self.doc.SaveAs(filename)
+    self.xlApp.Quit()
 
 
 def close(self):

@@ -9,7 +9,7 @@ import xlwt
 #     reload(sys)
 #     sys.setdefaultencoding(defaultencoding)
 
-gis_data = r'F:\台账\种植表汇总统计\纳雍县\连接CHANGE.gdb\T总数据_merge'
+gis_data = r'E:\台账\大方县\T大方DATA.gdb\T大方县20201001merge'
 
 with arcpy.da.SearchCursor(gis_data,
                            ['LBBM', '水稻19年', '水稻19年面积', '水稻20年', '水稻20年面积', '玉米19年', '玉米19年面积', '玉米20年', '玉米20年面积',
@@ -82,4 +82,4 @@ with arcpy.da.SearchCursor(gis_data,
                     s = s + float(_ii)
             ws.write(r, _y, s)
         r += 1
-    work_book.save(r'C:\Users\65680\Desktop\ZZZ\NYX20200902-1.xls')
+    work_book.save(r'C:\Users\65680\Desktop\DFX\DFX_20201001-1.xls')
