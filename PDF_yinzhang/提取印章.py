@@ -41,8 +41,8 @@ def action(inputfile, outputfile):
   img1.save(outputfile)
 
 if __name__ == "__main__":
-  inputfile = r'C:\Users\runke\Desktop\gongzhang\1.png'
-  outputfile = 'x.png'
+  inputfile = r'C:\Users\65680\Desktop\t.png'
+  outputfile = r'C:\Users\65680\Desktop\t2.png'
   argv = sys.argv[1:]
   try:
     opts, args = getopt.getopt(argv,"hi:o:",["ifile=","ofile="])
