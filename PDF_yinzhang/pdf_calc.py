@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 # Time:2020/11/26
-# coding=utf-8
-# author: echo
-# date: 2020/04/03
 
 import fitz
 import os

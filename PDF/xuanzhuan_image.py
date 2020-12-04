@@ -31,6 +31,6 @@ def cut_image(path, out_Path, x, y, w, h):
                 out.save(os.path.join(out_Path, file))
 
 
-in_path = r"C:\Users\65680\Desktop\确实"
-out_path = r"C:\Users\65680\Desktop\确实"
+in_path = r"F:\1台账导出文档基础资料\大方县台账\1平面布置图"
+out_path = r"F:\1台账导出文档基础资料\大方县台账\1平面布置图_旋转"
 cut_image(in_path, out_path, 84, 106, 1011, 1426)

@@ -4,7 +4,7 @@ import xlwt
 import time
 # import os
 # import sys
-
+#
 # defaultencoding = 'utf-8'
 # if sys.getdefaultencoding() != defaultencoding:
 #     reload(sys)
@@ -13,8 +13,8 @@ start_time = time.clock()
 
 print('开始时间：%s' % start_time)
 
-data = r"F:\思南.gdb\T思南县消除中段1027_111_dissolve"  # 数据路径
-path = r"C:\Users\65680\Desktop\SNX"  # 保存位置
+data = r"E:\台账-1\玉屏县\玉屏县\T玉屏县台账数据.gdb\评价单元对应农用地图层_消除后_dissolve_1201"  # 数据路径
+path = r"C:\Users\65680\Desktop\YPX"  # 保存位置
 
 data_list = []
 data_list1 = []
@@ -135,7 +135,7 @@ for data_sys in Max_LIST:
     ws.write(r, 26, xlwt.Formula('SUM(H%s:Y%s)' % (r + 1, r + 1)), style_4)
     r = r + 1
 
-workbook.save('%s/SNX_20201029_dissolve.xls' % path)
+workbook.save('%s/YPX_20201201_dissolve.xls' % path)
 
 end_time = time.clock()
 times = end_time - start_time

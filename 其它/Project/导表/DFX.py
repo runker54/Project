@@ -80,7 +80,7 @@ def set_excel_title(ws, xz):
     style_2.borders = borders
     style_2.alignment.wrap = 1
 
-    ws.write_merge(0, 0, 0, 35, '大方县%s耕地种植情况调查表（二）' % xz, style_1)
+    ws.write_merge(0, 0, 0, 35, 'PDF内盖章%s耕地种植情况调查表（二）' % xz, style_1)
     ws.write_merge(1, 1, 0, 2, '填报单位（盖章）：', style_3)
     ws.write_merge(1, 1, 6, 7, '填报人：', style_3)
     ws.write_merge(1, 1, 15, 16, '电话：', style_3)

@@ -4,17 +4,16 @@ import time
 import xlwt
 
 # import sys
-
 # defaultencoding = 'utf-8'
 # if sys.getdefaultencoding() != defaultencoding:
 #     reload(sys)
 #     sys.setdefaultencoding(defaultencoding)
 
-gis_data = r'F:\思南.gdb\T思南县消除中段1027_111_连接'
+gis_data = r'E:\台账-1\玉屏县\玉屏县\T玉屏县台账数据.gdb\评价单元对应农用地图层_无机5综合_52_Project_SD_消除后1128'
 
 with arcpy.da.SearchCursor(gis_data,
-                           ['LBBM', 'MAX_水稻19年', 'MAX_水稻19年面积', 'MAX_水稻20年', 'MAX_水稻20年面积',
-                            'MAX_玉米19年', 'MAX_玉米19年面积', 'MAX_玉米20年', 'MAX_玉米20年面积',
+                           ['LBBM', '水稻19年', '水稻19年面积', '水稻20年', '水稻20年面积',
+                            '玉米19年', '玉米19年面积', '玉米20年', '玉米20年面积',
                             '周边环境', '主要作物19年', '主要作物20年']) as currsor:
     lbbm_list = []
     message_list = []
@@ -97,4 +96,4 @@ with arcpy.da.SearchCursor(gis_data,
                     s = s + float(_ii)
             ws.write(r, _y, s)
         r += 1
-    work_book.save(r'C:\Users\65680\Desktop\SNX\SNX_20201028-1.xls')
+    work_book.save(r'C:\Users\65680\Desktop\YPX\YPX_20201201-1.xls')

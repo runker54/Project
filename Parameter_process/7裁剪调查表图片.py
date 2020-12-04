@@ -46,6 +46,6 @@ def cut_image(path, out_Path, x, y, w, h):
                 region.save(new_name)
 
 
-in_path = r"F:\1台账导出文档基础资料\湄潭县台账\1湄潭县调查表\永兴镇调查表"
-out_path = r"F:\1台账导出文档基础资料\湄潭县台账\1湄潭县调查表cut_image"
-cut_image(in_path, out_path, 377, 289, 1704, 2440)
+in_path = r"F:\kaiyang\KYX_PDF"  # 需裁剪图片的路径
+out_path = r"E:\xye\0开阳县台账\cut"   # 裁剪后的图片存储路径
+cut_image(in_path, out_path, 70, 95, 1033, 1448)  # 输入四个参数

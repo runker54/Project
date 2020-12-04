@@ -23,8 +23,6 @@ def doc_(*args):
     document.styles['Normal'].element.rPr.rFonts.set(qn('w:eastAsia'), u'仿宋')
     document.add_paragraph()
     document.add_paragraph()
-    document.add_paragraph()
-    document.add_paragraph()
     bianhao = message[0].value
     qx = message[1].value
     xz = message[2].value
@@ -52,6 +50,7 @@ def doc_(*args):
     bgfgd = message[19].value
     sgmg = message[20].value
     zzjgtz = message[21].value
+    ymtk = message[10].value
     title_P = document.add_paragraph()
     title_P.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
     title_T = title_P.add_run(f'{bianhao}图斑情况说明')
@@ -121,26 +120,29 @@ def doc_(*args):
     run5 = paragraph_neirong.add_run(
         f"    编号{bianhao}地块位于{qx}{xz}{xzc},地块中心坐标：东经{lon},北纬{lat},质量类别为{zllb},地块总面积{rwmj}亩,经现场调查后，%s%s" % (
             qingkuang2019(ym19area, sd19area, qt19), qingkuang2020(ym20area, sd20area, qt20)))
+    document.add_paragraph()
     paragraph_qingkuang = document.add_paragraph()
+
     # 措施落实情况
     cqcs_qk = ''
     cqcs_dict = {'品种调整': pztz, '秸秆还田': jght, '深翻耕': sfg, '优化施肥': yhsf, '退耕还林还草': tghl, '土地利用变更为非农用地': bgfgd,
-                 '农户自主休耕': sgmg, '种植结构调整': zzjgtz}
+                 '农户自主休耕': sgmg, '种植结构调整': zzjgtz, '叶面调控': ymtk}
     ix = [x + ':' + cqcs_dict[x] + '亩' for x in cqcs_dict if cqcs_dict[x] != ""]
 
     for one_mes in ix:
         one_mes = str(one_mes).replace(' ', '') + '，'
         cqcs_qk += one_mes
     cqcs_qk = cqcs_qk[:-1] + '。'
+    document.add_paragraph()
     run1 = paragraph_qingkuang.add_run(
         f"    图斑措施落实情况为：{cqcs_qk}")
 
     # 措施佐证文件情况
     ix_1 = [x for x in cqcs_dict if cqcs_dict[x] != ""]
-    zzwj_dict = {'品种调整': '佐证资料文件见附件第一章P1-35', '深翻耕': '佐证资料文件见附件第四章P126-222',
-                 '优化施肥': '佐证资料文件见附件第四章P126-222', '退耕还林还草': '佐证资料文件见附件第三章P77-116',
-                 '土地利用变更为非农用地': '佐证资料文件见附件第四章P75', '种植结构调整': '佐证文件资料见附件第一章P37-59',
-                 '秸秆还田': '佐证文件资料见', '农户自主休耕': '佐证文件见附件第五章P225-234'}
+    zzwj_dict = {'品种调整': '措施佐证资料文件附件第一章', '深翻耕': '佐证资料文件见附件第四章P126-222',
+                 '优化施肥': '措施佐证资料文件见附件第二章', '退耕还林还草': '措施佐证资料文件见附件第三章',
+                 '土地利用变更为非农用地': '措施佐证资料文件见附件第四章', '种植结构调整': '措施佐证文件资料见附件第五章',
+                 '秸秆还田': '佐证文件资料见', '农户自主休耕': '佐证文件见自主休耕附件及图片', '叶面调控': '佐证文件资料见附件第六章及光盘内视频图片等资料'}
     sm_list = [x + "措施" + zzwj_dict[x] + "," for x in ix_1]
     zzwj_sm = ''
     for one_cs in sm_list:
@@ -148,17 +150,19 @@ def doc_(*args):
     zzwj_sm = zzwj_sm[:-1] + '。'
     paragraph_wenjian = document.add_paragraph()
     run6 = paragraph_wenjian.add_run(f"    {zzwj_sm}")
+    document.add_paragraph()
     paragraph_shuoming = document.add_paragraph()
     run2 = paragraph_shuoming.add_run("特此说明：")
-    document.add_paragraph()
-    paragraph_shiti = document.add_paragraph()
-    run3 = paragraph_shiti.add_run("%s" % ((" ") * 46))
-    document.add_paragraph()
-    paragraph_shijian = document.add_paragraph()
-    run4 = paragraph_shijian.add_run("%s责任单位（盖章）：" % ((" ") * 36))
+    # paragraph_shiti = document.add_paragraph()
+    # run3 = paragraph_shiti.add_run("%s" % ((" ") * 46))
+    #
+    # paragraph_shijian = document.add_paragraph()
+
+    # run4 = paragraph_shijian.add_run("%s年    月     日" % ((" ") * 36))
+    # run4 = paragraph_shijian.add_run("%s责任单位（盖章）：" % ((" ") * 36))
 
     # 设置字体格式及行距
-    for i in [run1, run2, run3, run4, run5, run6]:
+    for i in [run1, run2, run5, run6]:
         i.line_spacing = 1.5  # 设置行距
         font = i.font  # 建立对象
         font.size = Pt(14)  # 设置字号
@@ -193,8 +197,12 @@ def diaochabiao(**args):
     title = document.add_heading('', 3)
     title1 = title.add_run(f'{message[0].value}')
     title1.font.color.rgb = RGBColor(0, 0, 0)
-    document.add_picture("%s" % diaochabiao_dict.get(message[0].value),
-                         width=shared.Cm(17), height=shared.Cm(22))  # 写入调查表
+    if one_title == 0:
+        document.add_picture("%s" % diaochabiao_dict.get(message[0].value),
+                             width=shared.Cm(17), height=shared.Cm(20))  # 写入调查表
+    else:
+        document.add_picture("%s" % diaochabiao_dict.get(message[0].value),
+                             width=shared.Cm(17), height=shared.Cm(22))  # 写入调查表
 
 
 # 写入现场图片
@@ -204,7 +212,14 @@ def xianchang_pictures(*args):
             if pictures_xc.endswith('jpg'):
                 in_pictures_xc = os.path.join(xctp_dict.get(*args), pictures_xc)
                 document.add_picture("%s" % in_pictures_xc,
-                                     height=shared.Cm(11), width=shared.Cm(16))  # 写入现场图片
+                                     height=shared.Cm(10), width=shared.Cm(14.5))  # 写入现场图片
+                pargah_shuoming = document.add_paragraph()
+                run_text = pargah_shuoming.add_run('图片说明：')
+                run_text.line_spacing = 1.5  # 设置行距
+                font = run_text.font  # 建立对象
+                font.size = Pt(14)  # 设置字号
+                font.name = '仿宋'  # 设置字体
+                run_text.element.rPr.rFonts.set(qn('w:eastAsia'), u'仿宋')  # 设置字体
     except AttributeError:
         print("无该地块照片")
 
@@ -214,16 +229,11 @@ def dikuai_shuoming(*args):
                          width=shared.Cm(15), height=shared.Cm(21))  # 写入地块说明
 
 
-sheet_path = r"F:\1台账导出文档基础资料\湄潭县台账\4湄潭县表格信息\MTX20200908_dissolve.xls"  # 表格位置
-pingmiantu_path = r"F:\1台账导出文档基础资料\湄潭县台账\3湄潭县平面布置图_旋转"  # 平面图位置
-
-xianchangtu_path = r"F:\1台账导出文档基础资料\湄潭县台账\5湄潭县现场图片"  # 现场图位置
-
-diaochabiao_path = r"F:\1台账导出文档基础资料\湄潭县台账\1湄潭县调查表cut_image"  # 调查表位置
-
-# dikuaishuoming_path = r"F:\湄潭县台账\2湄潭县情况说明表"  # 情况说明表位置
-
-document_save_path = r'F:\2台账导出结果文档\湄潭县'
+sheet_path = r"E:\xye\0玉屏县台账\YPX_20201201_dissolve.xls"  # 索引表格路径
+pingmiantu_path = r"E:\xye\0玉屏县台账\平面布置图_roate"  # 平面布置图路径
+xianchangtu_path = r"E:\xye\0玉屏县台账\现场图片"  # 现场图片路径
+diaochabiao_path = r"E:\xye\0玉屏县台账\调查表_cut"  # 调查表路径
+document_save_path = r'E:\xye\0玉屏县台账\文档'  # 导出文档存储路径
 
 pdf_dir = []
 diaochabiao_dict = {}
@@ -249,7 +259,7 @@ for xctp_dir in os.listdir(xianchangtu_path):
 #             dk_key = re.findall(r"5\d{11}", str(one_file))[0]
 #             shuoming_dict[dk_key] = os.path.join(roots, one_file)
 work_book = xlrd.open_workbook(sheet_path)  # 打开工作薄
-work_sheet = work_book.sheet_by_index(1)  # 打开表格
+work_sheet = work_book.sheet_by_index(2)  # 打开表格
 
 xz_list = []
 message_list = []  # 全县总地块信息列表
@@ -269,7 +279,7 @@ for one_xz in xz_list:
     one_message_list = list(filter(lambda x: x[2].value == one_xz, message_list))
     one_message_list.sort(key=lambda x: x[2].value)
     cz_list = []
-    for one_row in one_message_list:  # 逐一写入各个地块情况及资料
+    for one_row in one_message_list:  # 提取列表
         cz_list.append(one_row[3].value)
         cz_list = list(set(cz_list))
     print(cz_list)
@@ -285,6 +295,7 @@ for one_xz in xz_list:
             two_message_list = list(filter(lambda x: x[3].value == one_cz, one_message_list))
             two_message_list.sort(key=lambda x: x[3].value)
             for message in two_message_list:
+                one_title = two_message_list.index(message)
                 print(message)
                 print(message[0].value)
                 diaochabiao()  # 写入调查表

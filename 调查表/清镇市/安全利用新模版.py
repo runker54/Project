@@ -1,6 +1,6 @@
 # coding:utf-8
 import os
-
+import time
 import xlwt
 import xlrd
 
@@ -210,10 +210,10 @@ def sheet(x):
     ws.write_merge(1, 1, 0, 22, '安全利用类耕地调查表', style()[4])  # 标题
     # 表格头
     ws.write_merge(2, 2, 0, 4, '责任单位（盖章）：', style()[3])
-    ws.write_merge(3, 3, 0, 6, '责任单位负责人（盖章）：', style()[3])
-    ws.write_merge(2, 2, 11, 14, '填表人：', style()[3])
-    ws.write_merge(3, 3, 11, 13, '填表日期：', style()[3])
-    ws.write_merge(2, 2, 17, 19, '联系电话：', style()[3])
+    ws.write_merge(3, 3, 0, 10, '责任单位负责人（盖章）：%s' % zrdwfze, style()[3])
+    ws.write_merge(2, 2, 11, 16, '填表人：%s' % tbr, style()[3])
+    ws.write_merge(3, 3, 11, 19, '填表日期：%s' % tbrq, style()[3])
+    ws.write_merge(2, 2, 17, 22, '联系电话：%s' % lxdh, style()[3])
     ws.write_merge(3, 3, 20, 22, '单位：亩', style()[3])
     # 表格主体
     ws.write_merge(4, 5, 0, 3, '地块基本信息', style()[0])
@@ -268,10 +268,11 @@ def sheet(x):
     ws.write_merge(26, 26, 12, 13, '面积：', style()[8])
     ws.write_merge(25, 25, 5, 19, '   综合治理技术（VIP或VIP+n）', style()[8])
     ws.write_merge(26, 26, 5, 8, '   复合措施', style()[8])
-
+    chaxun_list1 = [sssj2017, '', '', '', sssj2018, '', '', '', sssj2019, '', '', '', sssj2020]
+    chaxun_list2 = [zz_picture, '', '', '', zz_video, '', '', '', zz_file, '', '', '', zz_pick]
     for _x in [0, 4, 8, 12]:
-        ws.write(27, 7 + _x, '£', style()[12])
-        ws.write(28, 7 + _x, '£', style()[12])
+        ws.write(27, 7 + _x, '%s' % chaxun_dict[chaxun_list1[_x]], style()[12])
+        ws.write(28, 7 + _x, '%s' % chaxun_dict[chaxun_list2[_x]], style()[12])
     ws.write_merge(27, 27, 4, 6, '实施时间', style()[0])
     ws.write_merge(28, 28, 4, 6, '佐证台账', style()[0])
     ws.write_merge(27, 27, 8, 10, '2017年', style()[11])
@@ -283,13 +284,13 @@ def sheet(x):
     ws.write_merge(28, 28, 16, 18, '文件方案类', style()[11])
     ws.write_merge(28, 28, 20, 22, '收据发票类', style()[13])
 
-    ws.write(27, 19, 'R', style()[12])  # R
-    ws.write(28, 7, 'R', style()[12])  # R
-    ws.write(28, 15, 'R', style()[12])  # R
-    if tghl != '':
-        ws.write(27, 7, 'R', style()[12])  # R
-    else:
-        pass
+    # ws.write(27, 19, 'R', style()[12])  # R
+    # ws.write(28, 7, 'R', style()[12])  # R
+    # ws.write(28, 15, 'R', style()[12])  # R
+    # if tghl != '':
+    #     ws.write(27, 7, 'R', style()[12])  # R
+    # else:
+    #     pass
 
     # 列宽
 
@@ -393,67 +394,68 @@ def sheet(x):
     return workbook
 
 
-output_path = r'E:\台账\大方县\大方县导出资料\DFX_SHEET'
+output_path = r'C:\Users\65680\Desktop\SNX_SHEET'  # 输出路径
 
-old_path = r'E:\台账\大方县\大方导表资料\DFX20201001\DFX_20201001_dissolve.xls'
+old_path = r'C:\Users\65680\Desktop\SNX\SNX_20201029_dissolve.xls'  # 表格路径
 
-old_workbook = xlrd.open_workbook(old_path)
-old_ws = old_workbook.sheet_by_index(1)
-rows = old_ws.nrows
-for row_num in range(1, rows):
+old_workbook = xlrd.open_workbook(old_path)  # 建立表格对象
+old_ws = old_workbook.sheet_by_index(1)  # 打开对应表格
+rows = old_ws.nrows  # 获取行数
+for row_num in range(1, rows):  # 遍历每一个地块
     row = old_ws.row(row_num)
-    dkbm = row[0].value
-    qx = row[1].value
-    xz = row[2].value
-    xzc = row[3].value
-    lat = row[4].value
-    lon = row[5].value
+    dkbm = row[0].value  # 地块编码
+    qx = row[1].value  # 区县
+    xz = row[2].value  # 乡镇
+    xzc = row[3].value  # 行政村
+    lat = row[4].value  # 经度
+    lon = row[5].value  # 纬度
     lat = str(lat)
     lon = str(lon)
-    if len(lat) < 10:
-        lat = str(lat)+(10 - len(lat))*'0'
-    if len(lon) < 9:
-        lon = str(lon)+(9 - len(lon))*'0'
-    pztz = row[7].value
-    shtj = row[8].value
-    sftk = row[9].value
-    ymtk = row[10].value
-    jght = row[11].value
-    sfg = row[12].value
-    ywdh = row[13].value
-    yhsf = row[14].value
-    dxtk = row[15].value
-    wswxf = row[16].value
-    zwtq = row[17].value
-    tghl = row[18].value
-    bgfgd = row[19].value
-    sgmg = row[20].value
-    zzjgtz = row[21].value
-    ywc = row[25].value
-    # rwmj = row[26].value
-    # value_list = [pztz, shtj, sftk, ymtk, jght, sfg, ywdh, yhsf, dxtk, wswxf, zwtq, tghl, bgfgd, sgmg, zzjgtz]
-    # rwmj = 0
-    # for mj_value in value_list:
-    #     if mj_value == '':
-    #         mj = 0
-    #     else:
-    #         mj = round(float(mj_value), 1)
-    #     rwmj += mj
-    #
-    # rwmj = round(rwmj, 1)
-    rwmj = row[26].value
-    sd19 = row[27].value
-    sd19a = row[28].value
-    sd20 = row[29].value
-    sd20a = row[30].value
-    ym19 = row[31].value
-    ym19a = row[32].value
-    ym20 = row[33].value
-    ym20a = row[34].value
-    zbhj = row[35].value
-    qtzyzw19 = row[36].value
-    qtzyzw = row[37].value
-
+    if len(lat) < 10:  # 规则化经度显示
+        lat = str(lat) + (10 - len(lat)) * '0'
+    if len(lon) < 9:  # 规则化纬度显示
+        lon = str(lon) + (9 - len(lon)) * '0'
+    pztz = row[7].value  # 品种调整面积
+    shtj = row[8].value  # 石灰调节面积
+    sftk = row[9].value  # 水分调控面积
+    ymtk = row[10].value  # 叶面调控面积
+    jght = row[11].value  # 秸秆还田面积
+    sfg = row[12].value  # 深翻耕面积
+    ywdh = row[13].value  # 原位钝化面积
+    yhsf = row[14].value  # 优化施肥面积
+    dxtk = row[15].value  # 定向调控面积
+    wswxf = row[16].value  # 微生物修复面积
+    zwtq = row[17].value  # 植物提取面积
+    tghl = row[18].value  # 退耕还林还草面积
+    bgfgd = row[19].value  # 变更为非农用地面积
+    sgmg = row[20].value  # 自主休耕面积
+    zzjgtz = row[21].value  # 种植结构调整面积
+    ywc = row[25].value  # 地块已完成面积
+    rwmj = row[26].value  # 地块任务面积
+    sd19 = row[27].value  # 水稻19年品种
+    sd19a = row[28].value  # 水稻19年面积
+    sd20 = row[29].value  # 水稻20年品种
+    sd20a = row[30].value  # 水稻20年面积
+    ym19 = row[31].value  # 玉米19年品种
+    ym19a = row[32].value  # 玉米19年面积
+    ym20 = row[33].value  # 玉米20年品种
+    ym20a = row[34].value  # 玉米20年面积
+    zbhj = row[35].value  # 周边环境
+    qtzyzw19 = row[36].value  # 主要作物19年
+    qtzyzw = row[37].value  # 主要作物20年
+    sssj2017 = row[38].value  # 实施时间2017年
+    sssj2018 = row[39].value  # 实施时间2018年
+    sssj2019 = row[40].value  # 实施时间2019年
+    sssj2020 = row[41].value  # 实施时间2020年
+    zz_picture = row[42].value  # 图片类
+    zz_video = row[43].value  # 视频类
+    zz_file = row[44].value  # 文件方案类
+    zz_pick = row[45].value  # 收据发票类
+    zrdwfze = row[46].value  # 责任单位负责人
+    tbr = row[47].value  # 填表人
+    lxdh = row[48].value  # 联系电话
+    tbrq = row[49].value  # 填表日期
+    chaxun_dict = {"是": 'R', "": '£'}  # 查询用字段
     if zbhj == "有":
         zbhj1 = 'R'
         zbhj2 = '£'

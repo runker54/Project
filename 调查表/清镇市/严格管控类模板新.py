@@ -208,11 +208,11 @@ def sheet(x):
     ws.write_merge(0, 0, 0, 22, '附表1-2', style()[7])  # 附表
     ws.write_merge(1, 1, 0, 22, '严格管控类耕地调查表', style()[4])  # 标题
     # 表格头
-    ws.write_merge(2, 2, 0, 4, '责任单位（盖章）：', style()[3])
-    ws.write_merge(3, 3, 0, 6, '责任单位负责人（盖章）：', style()[3])
-    ws.write_merge(2, 2, 11, 14, '填表人：', style()[3])
-    ws.write_merge(3, 3, 11, 13, '填表日期：', style()[3])
-    ws.write_merge(2, 2, 17, 19, '联系电话：', style()[3])
+    ws.write_merge(2, 2, 0, 4, '责任单位（盖章）：', style()[3])   # 责任单位
+    ws.write_merge(3, 3, 0, 10, '责任单位负责人（盖章）：%s' % zrdwfze, style()[3])
+    ws.write_merge(2, 2, 11, 16, '填表人：%s' % tbr, style()[3])
+    ws.write_merge(3, 3, 11, 19, '填表日期：%s' % tbrq, style()[3])
+    ws.write_merge(2, 2, 17, 22, '联系电话：%s' % lxdh, style()[3])
     ws.write_merge(3, 3, 20, 22, '单位：亩', style()[3])
     # 表格主体
     ws.write_merge(4, 5, 0, 3, '地块基本信息', style()[0])
@@ -220,16 +220,17 @@ def sheet(x):
     ws.write_merge(4, 4, 14, 16, '地理位置', style()[0])
     ws.write_merge(5, 5, 4, 6, '中心坐标', style()[0])
     ws.write_merge(5, 5, 18, 19, '面积', style()[0])
-
+    # 主体1
     ws.write_merge(7, 28, 0, 0, '调查内容', style()[6])
     ws.write_merge(6, 6, 0, 3, '周边环境', style()[0])
     ws.write_merge(7, 11, 1, 3, '2019年作物种植情况', style()[0])
     ws.write_merge(12, 16, 1, 3, '2020年作物种植情况', style()[0])
     ws.write_merge(17, 28, 1, 3, '采取措施', style()[5])
-
+    # 周边环境
     ws.write_merge(6, 6, 4, 15, '2公里范围内有或曾经有工矿企业、冶炼厂', style()[1])
     ws.write_merge(6, 6, 17, 19, '有', style()[11])
     ws.write_merge(6, 6, 21, 22, '无', style()[13])
+    # 作物种植情况1
     for _i in [0, 5]:
         ws.write_merge(7 + _i, 8 + _i, 4, 5, '水稻', style()[0])
         ws.write_merge(9 + _i, 10 + _i, 4, 5, '油菜', style()[0])
@@ -246,7 +247,6 @@ def sheet(x):
     cs_list_0 = ['', '', '', '', '', '', '', '']
     cs_list_1 = ['种植结构调整（调整为非食用农产品）', '划定为特定农产品严格管控区', '退耕还林还草', '耕地利用变更为非农用地', '休耕', '其它措施', '', '']
     cs_list_2 = ['', '', '', '', '', '', '', '']
-    cs_list_3 = ['', '', '', '', '', '', '', '']
     for _c in range(17, 23):
         ws.write(_c, 4, '£', style()[9])  # 特殊格式
         ws.write(_c, 12, '', style()[9])  # 特殊格式
@@ -260,17 +260,19 @@ def sheet(x):
     ws.write(25, 4, '', style()[8])
     ws.write(26, 4, '', style()[8])
 
-    ws.write_merge(23, 23, 4, 21, '', style()[8])
+    ws.write_merge(23, 23, 4, 21, '%s' % qtcsqk, style()[8])
     ws.write_merge(24, 24, 4, 21, '', style()[8])
     ws.write_merge(25, 25, 20, 21, '', style()[8])
     ws.write_merge(26, 26, 20, 21, '', style()[8])
     ws.write_merge(26, 26, 12, 13, '', style()[8])
     ws.write_merge(25, 25, 5, 19, '', style()[8])
     ws.write_merge(26, 26, 5, 8, '', style()[8])
-
+    # 写入措施实施时间与佐证台账类型的特殊符号
+    chaxun_list1 = [sssj2017, '', '', '', sssj2018, '', '', '', sssj2019, '', '', '', sssj2020]
+    chaxun_list2 = [zz_picture, '', '', '', zz_video, '', '', '', zz_file, '', '', '', zz_pick]
     for _x in [0, 4, 8, 12]:
-        ws.write(27, 7 + _x, '£', style()[12])
-        ws.write(28, 7 + _x, '£', style()[12])
+        ws.write(27, 7 + _x, '%s' % chaxun_dict[chaxun_list1[_x]], style()[12])
+        ws.write(28, 7 + _x, '%s' % chaxun_dict[chaxun_list2[_x]], style()[12])
     ws.write_merge(27, 27, 4, 6, '实施时间', style()[0])
     ws.write_merge(28, 28, 4, 6, '佐证台账', style()[0])
     ws.write_merge(27, 27, 8, 10, '2017年', style()[11])
@@ -282,13 +284,13 @@ def sheet(x):
     ws.write_merge(28, 28, 16, 18, '文件方案类', style()[11])
     ws.write_merge(28, 28, 20, 22, '收据发票类', style()[13])
 
-    ws.write(27, 19, 'R', style()[12])  # R
-    ws.write(28, 7, 'R', style()[12])  # R
-    ws.write(28, 15, 'R', style()[12])  # R
-    if tghl != '':
-        ws.write(27, 7, 'R', style()[12])  # R
-    else:
-        pass
+    # ws.write(27, 19, 'R', style()[12])  # 措施实施时间2020年
+    # ws.write(28, 7, 'R', style()[12])  # 佐证台账类型图片类
+    # ws.write(28, 15, 'R', style()[12])  # 佐证台账类型文件方案类
+    # if tghl != '':
+    #     ws.write(27, 7, 'R', style()[12])  # 措施实施时间2017
+    # else:
+    #     pass
 
     # 列宽
 
@@ -362,19 +364,18 @@ def sheet(x):
     # 写入面积第二列
     for _p2 in range(17, 27):
         ws.write(_p2, 22, '', style()[10])
-    # 复合措施
+    # 补空
     ws.write_merge(26, 26, 9, 11, '', style()[8])
-    # 复合措施面积
     ws.write_merge(26, 26, 14, 19, '', style()[8])
 
-    ws.write_merge(17, 17, 18, 21, '%s' % zzjgtz, style()[8])  # zz
-    ws.write_merge(18, 18, 18, 21, '', style()[8])  # hd
-    ws.write_merge(19, 19, 18, 21, '%s' % tghl, style()[8])  # tg
-    ws.write_merge(20, 20, 18, 21, '%s' % bgfgd, style()[8])  # bg
-    ws.write_merge(21, 21, 18, 21, '%s' % sgmg, style()[8])  # xg
-    ws.write_merge(22, 22, 18, 21, '%s' % qtcsmj, style()[8])  # qt
-    true_list = [zzjgtz, '', tghl, bgfgd, sgmg, qtcsmj]
-    for _z1, key1 in enumerate(true_list):
+    ws.write_merge(17, 17, 18, 21, '%s' % zzjgtz, style()[8])  # 种植结构调整面积
+    ws.write_merge(18, 18, 18, 21, '', style()[8])  # 划定为特定农产品严格管控区面积
+    ws.write_merge(19, 19, 18, 21, '%s' % tghl, style()[8])  # 退耕还林面积
+    ws.write_merge(20, 20, 18, 21, '%s' % bgfgd, style()[8])  # 变更为非农用地面积
+    ws.write_merge(21, 21, 18, 21, '%s' % sgmg, style()[8])  # 休耕面积
+    ws.write_merge(22, 22, 18, 21, '%s' % qtcsmj, style()[8])  # 其他措施面积
+    true_list = [zzjgtz, '', tghl, bgfgd, sgmg, qtcsmj]  # 写入采取措施的各项特殊符号
+    for _z1, key1 in enumerate(true_list):  # 对各项措施情况写入对应特殊符号
         if key1 != '':
             cise = 'R'
             ws.write(17 + _z1, 4, cise, style()[9])
@@ -382,17 +383,16 @@ def sheet(x):
             cise = '£'
             ws.write(17 + _z1, 4, cise, style()[9])
 
-    ws.show_headers = False
-    ws.show_footers = False
+    ws.show_headers = False  # 不显示页眉
+    ws.show_footers = False  # 不显示页脚
     ws.header_str = b''
     ws.footer_str = b''
     return workbook
 
 
-output_path = r'E:\台账\大方县\大方县导出资料\DFX_SHEET'
+output_path = r'C:\Users\65680\Desktop\SNX_SHEET'   # 输出路径
 
-old_path = r'E:\台账\大方县\大方导表资料\DFX20201001\DFX_20201001_dissolve.xls'
-
+old_path = r'C:\Users\65680\Desktop\SNX\SNX_20201029_dissolve.xls'  # 表格路径
 
 old_workbook = xlrd.open_workbook(old_path)
 old_ws = old_workbook.sheet_by_index(1)
@@ -428,15 +428,25 @@ for row_num in range(1, rows):
     bgfgd = row[19].value
     sgmg = row[20].value
     zzjgtz = row[21].value
-    value_list = [pztz, shtj, sftk, ymtk, jght, sfg, ywdh, yhsf, dxtk, wswxf, zwtq]
-    qtcsmj = 0
-    for mj_value in value_list:
-        if mj_value == '':
+    value_dict_qt = {'品种调整': pztz, '石灰调节': shtj, '水分调控': sftk,
+                     '叶面调控': ymtk, '秸秆还田': jght, '深翻耕': sfg,
+                     '原位钝化': ywdh, '优化施肥': yhsf, '定向调控': dxtk,
+                     '微生物修复': wswxf, '植物提取': zwtq}
+    qtcsmj = 0  # 其它措施面积
+    qtcsqk_list = []  # 其它措施包含项目及面积存储list
+    qtcsqk = ''  # 其它措施情况结果
+    for mj_value in value_dict_qt:
+        if value_dict_qt[mj_value] == '':
             mj = 0
         else:
-            mj = round(float(mj_value), 1)
-        qtcsmj += mj
-    qtcsmj = round(qtcsmj, 1)
+            mj = round(float(value_dict_qt[mj_value]), 1)
+            qtqk = str(mj_value) + ':' + str(value_dict_qt[mj_value] + '，')  # 各单个措施情况
+            qtcsqk_list.append(qtqk)
+        qtcsmj += mj  # 累加其它措施面积
+        qtcsmj = round(qtcsmj, 1)
+    for one_qtqk in qtcsqk_list:
+        qtcsqk += one_qtqk
+    qtcsqk = f"其他措施为{qtcsqk[:len(qtcsqk)-1]}"
     if qtcsmj <= 0:
         qtcsmj = ''
     rwmj = row[26].value
@@ -451,7 +461,19 @@ for row_num in range(1, rows):
     zbhj = row[35].value
     qtzyzw19 = row[36].value
     qtzyzw20 = row[37].value
-
+    sssj2017 = row[38].value  # 实施时间2017年
+    sssj2018 = row[39].value  # 实施时间2018年
+    sssj2019 = row[40].value  # 实施时间2019年
+    sssj2020 = row[41].value  # 实施时间2020年
+    zz_picture = row[42].value  # 图片类
+    zz_video = row[43].value  # 视频类
+    zz_file = row[44].value  # 文件方案类
+    zz_pick = row[45].value  # 收据发票类
+    zrdwfze = row[46].value  # 责任单位负责人
+    tbr = row[47].value  # 填表人
+    lxdh = row[48].value  # 联系电话
+    tbrq = row[49].value  # 填表日期
+    chaxun_dict = {"是": 'R', "": '£'}  # 查询用字段
     if zbhj == "有":
         zbhj1 = 'R'
         zbhj2 = '£'
@@ -469,9 +491,8 @@ for row_num in range(1, rows):
         pass
     else:
         os.mkdir(czm)
-
     if row[6].value == '严格管控类':
         sheet('DATA').save('%s/%s%s%s-3.xls' % (czm, xz, xzc, dkbm))
         print(f"{dkbm}")
     else:
-        print(f'{"已跳过"}')
+        print(f"{'已跳过'}")

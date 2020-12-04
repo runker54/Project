@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 
 np.set_printoptions(threshold=np.inf)
-image=cv2.imread(r'C:\Users\runke\Desktop\gongzhang\test.png')
+image=cv2.imread(r'C:\Users\65680\Desktop\p1.png')
 
 hue_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 low_range = np.array([150, 103, 100])

@@ -1,26 +1,26 @@
 # -*- coding: utf-8 -*-#
 # -------------------------------------------------------------------------------
-# Author:       Runker54
-# Date:         2020-09-05
+# Author:       A
+# Date:         2020-10-21
 # -------------------------------------------------------------------------------
 import arcpy
 import time
 
-arcpy.env.workspace = r"E:\台账\湄潭县\数据库\TEST.gdb"
+arcpy.env.workspace = r"C:\Users\65680\Desktop\思南县\source.gdb"
 
 lbbm_list = []
-with arcpy.da.SearchCursor("T新南镇_消除后_标识", ["LBBM"]) as currsor:
+with arcpy.da.SearchCursor("评价单元对应农用地图层_无机5综合_52_Project_SD", ["LBBM"]) as currsor:
     for row in currsor:
         lbbm_list.append(row[0])
 lbbm_list = list(set(lbbm_list))
-layers_1 = arcpy.MakeFeatureLayer_management("T新南镇_消除后_标识", "testlyr")  # 创建总视图
+layers_1 = arcpy.MakeFeatureLayer_management("评价单元对应农用地图层_无机5综合_52_Project_SD", "testlyr")  # 创建总视图
 # 个数统计
 total_count = len(lbbm_list)
 count_total = 1
 for one_elimte in lbbm_list:
     arcpy.env.overwriteOutput = True
     # print(one_elimte)
-    query = '\"LBBM\"=\'%s\' AND \"Shape_Area\" < 100' % one_elimte
+    query = '\"LBBM\"=\'%s\' AND \"DLMC_1\" = \'\'' % one_elimte
     arcpy.SelectLayerByAttribute_management(layers_1, 'NEW_SELECTION', query)
     arcpy.Eliminate_management(layers_1, "testA", "LENGTH", '\"LBBM\" <> \'%s\'' % one_elimte)  # 存储为A
     layers_1 = arcpy.MakeFeatureLayer_management("testA", "testlyr")    # 利用A创建视图

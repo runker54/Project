@@ -398,7 +398,7 @@ output_path = r'C:\Users\65680\Desktop\SNX'
 old_path = r'E:\台账\思南县\思南县导出表格更正20201014\思南县.xls'
 
 old_workbook = xlrd.open_workbook(old_path)
-old_ws = old_workbook.sheet_by_index(0)
+old_ws = old_workbook.sheet_by_index(1)
 rows = old_ws.nrows
 for row_num in range(1, rows):
     row = old_ws.row(row_num)

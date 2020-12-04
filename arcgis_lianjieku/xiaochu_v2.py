@@ -6,14 +6,15 @@
 import arcpy
 import time
 
-arcpy.env.workspace = r"C:\Users\65680\Documents\ArcGIS\Projects\MyProject\MyProject.gdb"
+arcpy.env.workspace = r"C:\Users\65680\Desktop\玉屏县\T玉屏县台账数据.gdb"
 
 lbbm_list = []
-with arcpy.da.SearchCursor("recursion_one_eye", ["LBBM"]) as currsor:
+with arcpy.da.SearchCursor("评价单元对应农用地图层_无机5综合_52_Project_SD", ["LBBM", "Shape_Area"]) as currsor:
     for row in currsor:
-        lbbm_list.append(row[0])
+        if row[1] <= 120:
+            lbbm_list.append(row[0])
 lbbm_list = list(set(lbbm_list))
-layers_1 = arcpy.MakeFeatureLayer_management("recursion_one_eye", "testlyr")  # 创建总视图
+layers_1 = arcpy.MakeFeatureLayer_management("评价单元对应农用地图层_无机5综合_52_Project_SD", "testlyr")  # 创建总视图
 # 个数统计
 total_count = len(lbbm_list)
 count_total = 0
@@ -23,7 +24,7 @@ for one_elimte in lbbm_list:
     start_time = time.time()
     arcpy.env.overwriteOutput = True
     # print(one_elimte)
-    query = '\"LBBM\"=\'%s\' AND \"Shape_Area\" < 100' % one_elimte
+    query = '\"LBBM\"=\'%s\' AND \"Shape_Area\" < 120' % one_elimte
     if i % 2 == 0:
         nice = "testB"
         good = "testA"

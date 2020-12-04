@@ -394,12 +394,12 @@ def sheet(x):
     return workbook
 
 
-output_path = r'C:\Users\65680\Desktop\SNX_SHEET'  # 输出路径
+output_path = r'C:\Users\65680\Desktop\YPX_SHEET1'  # 输出路径
 
-old_path = r'C:\Users\65680\Desktop\SNX\SNX_20201029_dissolve.xls'  # 表格路径
+old_path = r'C:\Users\65680\Desktop\YPX\YPX_20201201_dissolve.xls'  # 表格路径
 
 old_workbook = xlrd.open_workbook(old_path)  # 建立表格对象
-old_ws = old_workbook.sheet_by_index(1)  # 打开对应表格
+old_ws = old_workbook.sheet_by_index(2)  # 打开对应表格
 rows = old_ws.nrows  # 获取行数
 for row_num in range(1, rows):  # 遍历每一个地块
     row = old_ws.row(row_num)

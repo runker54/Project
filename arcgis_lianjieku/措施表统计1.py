@@ -1,7 +1,8 @@
 # coding: utf-8
 import arcpy
-# import time
+import time
 import xlwt
+
 # import sys
 
 # defaultencoding = 'utf-8'
@@ -9,10 +10,11 @@ import xlwt
 #     reload(sys)
 #     sys.setdefaultencoding(defaultencoding)
 
-gis_data = r'E:\台账\大方县\T大方DATA.gdb\T大方县20201001merge'
+gis_data = r'F:\思南.gdb\T思南县消除中段1027_111_连接'
 
 with arcpy.da.SearchCursor(gis_data,
-                           ['LBBM', '水稻19年', '水稻19年面积', '水稻20年', '水稻20年面积', '玉米19年', '玉米19年面积', '玉米20年', '玉米20年面积',
+                           ['LBBM', 'MAX_水稻19年', 'MAX_水稻19年面积', 'MAX_水稻20年', 'MAX_水稻20年面积',
+                            'MAX_玉米19年', 'MAX_玉米19年面积', 'MAX_玉米20年', 'MAX_玉米20年面积',
                             '周边环境', '主要作物19年', '主要作物20年']) as currsor:
     lbbm_list = []
     message_list = []
@@ -72,8 +74,21 @@ with arcpy.da.SearchCursor(gis_data,
         print(one_dk[0])
         for _x in [1, 3, 5, 7, 9, 10, 11]:
             s = ''
+            temp_I_list = []
             for _i in one_dk[_x]:
-                s += (str(_i) + " ")
+                print(_i)
+                temp_I_list = temp_I_list + str(_i).split(" ")
+            print(temp_I_list)
+            print('第一个')
+            temp_I_list = list(set(temp_I_list))
+            print(temp_I_list)
+            print('第二个')
+            for one_text in temp_I_list:
+                one_text = one_text+ ' '
+                s += one_text
+            s = s.strip()
+            print(s)
+
             ws.write(r, _x, s)
         for _y in [2, 4, 6, 8]:
             s = 0
@@ -82,4 +97,4 @@ with arcpy.da.SearchCursor(gis_data,
                     s = s + float(_ii)
             ws.write(r, _y, s)
         r += 1
-    work_book.save(r'C:\Users\65680\Desktop\DFX\DFX_20201001-1.xls')
+    work_book.save(r'C:\Users\65680\Desktop\SNX\SNX_20201028-1.xls')

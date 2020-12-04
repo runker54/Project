@@ -10,6 +10,7 @@ import xlrd
 from docx import Document
 from docx.shared import Pt
 from docx.enum.section import WD_ORIENTATION, WD_SECTION_START
+from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml.ns import qn
 from docx import shared
 from docx.shared import RGBColor
@@ -23,7 +24,8 @@ def doc_(*args):
     # title1 = title.add_run(f'{message[0].value}')
     # title1.font.color.rgb = RGBColor(250, 250, 250)
     # 添加文本
-    document.add_paragraph()
+    document.styles['Normal'].font.name = 'Times New Roman'
+    document.styles['Normal'].element.rPr.rFonts.set(qn('w:eastAsia'), u'仿宋')
     document.add_paragraph()
     document.add_paragraph()
     document.add_paragraph()
@@ -55,76 +57,98 @@ def doc_(*args):
     bgfgd = message[19].value
     sgmg = message[20].value
     zzjgtz = message[21].value
-
+    title_P = document.add_paragraph()
+    title_P.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    title_T = title_P.add_run(f'{bianhao}图斑情况说明')
+    fontT = title_T.font
+    fontT.size = Pt(18)
+    fontT.name = '仿宋'
+    document.add_paragraph()
+    # title_T.element.rPr.rFonts.set(qn('w:eastAsia'), u'仿宋')
     # 2019年作物种植情况
-
-
-
     def qingkuang2019(ym19area, sd19area, qt19):
         qingkuang19nian = ""
         ym19nian = ""
         if ym19area == 0:
             ym19nian = ""
         else:
-            ym19nian = f"玉米品种：{ym19pz}共 {ym19area} 亩,"
+            ym19nian = f"玉米品种：{ym19pz}，共{ym19area}亩,"
         ym19nian.strip()
         sd19nian = ""
         if sd19area == 0:
             sd19nian = ""
         else:
-            sd19nian = f"水稻品种：{sd19pz}共 {sd19area} 亩,"
+            sd19nian = f"水稻品种：{sd19pz}，共{sd19area}亩,"
         sd19nian.strip()
         qt19nian = ""
         if qt19 == ' ':
             qt19nian = "无其它作物，"
         else:
-            qt19nian = f"其它主要作物为：{qt19},"
+            qt19nian = f"其它主要作物：{qt19},"
         qt19nian.strip()
         if ym19area == 0 and sd19area == 0 and qt19 == ' ':
-            qingkuang19nian = "该地块2019年种植情况为:无农作物"
+            qingkuang19nian = "该地块2019年种植情况为:无农作物。"
         else:
-            qingkuang19nian = "该地块2019年种植情况为:"+sd19nian + ym19nian + qt19nian
+            qingkuang19nian = "该地块2019年种植情况为:" + sd19nian + ym19nian + qt19nian
         return qingkuang19nian
-
     qingkuang2019(ym19area, sd19area, qt19)
-
     # 2020年作物种植情况
-    def qingkuang2020(ym19area, sd19area, qt19):
+    def qingkuang2020(ym20area, sd20area, qt20):
         qingkuang20nian = ""
         ym20nian = ""
         if ym20area == 0:
             ym20nian = ""
         else:
-            ym20nian = f"玉米品种：{ym20pz}共 {ym20area} 亩,"
+            ym20nian = f"玉米品种：{ym20pz}，共{ym20area}亩,"
         ym20nian.strip()
         sd20nian = ""
         if sd20area == 0:
             sd20nian = ""
         else:
-            sd20nian = f"玉米品种：{sd20pz}共 {sd20area} 亩,"
+            sd20nian = f"玉米品种：{sd20pz}，共{sd20area}亩,"
         sd20nian.strip()
         qt20nian = ""
         if qt20 == ' ':
-            qt20nian = "无其它作物"
+            qt20nian = "无其它作物。"
         else:
-            qt20nian = f"其它主要作物为：{qt20},"
+            qt20nian = f"其它主要作物：{qt20},"
         qt20nian.strip()
         if ym20area == 0 and sd20area == 0 and qt20 == ' ':
-            qingkuang20nian = "该地块2020年种植情况为:无农作物"
+            qingkuang20nian = "该地块2020年种植情况为:无农作物。"
         else:
-            qingkuang20nian = "该地块2020年种植情况为:"+sd20nian + ym20nian + qt20nian
+            qingkuang20nian = "该地块2020年种植情况为:" + sd20nian + ym20nian + qt20nian
         return qingkuang20nian
-
     paragraph_neirong = document.add_paragraph()
     run5 = paragraph_neirong.add_run(
-        f"  编号{bianhao}地块位于{qx}{xz}{xzc},地块中心坐标：东经{lon},北纬{lat},质量类别为{zllb},总任务面积{rwmj}亩,经现场调查后，%s,%s" % (
-        qingkuang2019(ym19area, sd19area, qt19), qingkuang2020(ym20area, sd20area, qt20)))
+        f"    编号{bianhao}地块位于{qx}{xz}{xzc},地块中心坐标：东经{lon},北纬{lat},质量类别为{zllb},地块总面积{rwmj}亩,经现场调查后，%s,%s" % (
+            qingkuang2019(ym19area, sd19area, qt19), qingkuang2020(ym20area, sd20area, qt20)))
     paragraph_qingkuang = document.add_paragraph()
-    document.add_paragraph()
-    run1 = paragraph_qingkuang.add_run(
-        f"  图斑措施落实情况为：品种调整：{pztz} 亩，秸秆还田： {jght} 亩，深翻耕： {sfg} 亩，优化施肥： {yhsf} 亩，退耕还林还草： {tghl} 亩，"
-        f"土地利用变更为非农用地： {bgfgd} 亩，少耕休耕免耕： {sgmg} 亩，种植结构调整： {zzjgtz} 亩。实施时间为2017年至2020年。")
+    # 措施落实情况
+    cqcs_qk = ''
+    cqcs_dict = {'品种调整': pztz, '秸秆还田': jght, '深翻耕': sfg, '优化施肥': yhsf, '退耕还林还草': tghl, '土地利用变更为非农用地': bgfgd,
+                 '农户自主休耕': sgmg, '种植结构调整': zzjgtz}
+    ix = [x+':'+cqcs_dict[x]+'亩' for x in cqcs_dict if cqcs_dict[x] != ""]
 
+    for one_mes in ix:
+        one_mes = str(one_mes).replace(' ', '') + '，'
+        cqcs_qk += one_mes
+    cqcs_qk = cqcs_qk[:-1] + '。'
+    run1 = paragraph_qingkuang.add_run(
+        f"    图斑措施落实情况为：{cqcs_qk}")
+
+    # 措施佐证文件情况
+    ix_1 = [x for x in cqcs_dict if cqcs_dict[x] != ""]
+    zzwj_dict = {'品种调整': '佐证资料文件见', '深翻耕': '佐证资料文件见',
+                 '优化施肥': '佐证资料文件见', '退耕还林还草': '佐证资料文件见',
+                 '土地利用变更为非农用地': '佐证资料文件见', '种植结构调整': '佐证文件资料见',
+                 '秸秆还田': '佐证文件资料见', '农户自主休耕': '佐证文件见'}
+    sm_list = [x+"措施"+zzwj_dict[x]+"," for x in ix_1]
+    zzwj_sm = ''
+    for one_cs in sm_list:
+        zzwj_sm += one_cs
+    zzwj_sm = zzwj_sm[:-1]+'。'
+    paragraph_wenjian = document.add_paragraph()
+    run6 = paragraph_wenjian.add_run(f"    {zzwj_sm}")
     paragraph_shuoming = document.add_paragraph()
     run2 = paragraph_shuoming.add_run("特此说明：")
     document.add_paragraph()
@@ -134,20 +158,14 @@ def doc_(*args):
     paragraph_shijian = document.add_paragraph()
     run4 = paragraph_shijian.add_run("%s   年    月    日" % ((" ") * 36))
 
-    # 设置行距
-    run5.line_spacing = 1.5
-    run1.line_spacing = 1.5
-    run2.line_spacing = 1.5
-    run3.line_spacing = 1.5
-    run4.line_spacing = 1.5
-
-    # 设置字体格式
-    for i in [run1, run2, run3, run4, run5]:
-        font = i.font
-        font.size = Pt(14)
-        font.name = '仿宋'
-        i._element.rPr.rFonts.set(qn('w:eastAsia'), u'仿宋')
-        # run.blod = True
+    # 设置字体格式及行距
+    for i in [run1, run2, run3, run4, run5, run6]:
+        i.line_spacing = 1.5  # 设置行距
+        font = i.font  # 建立对象
+        font.size = Pt(14)  # 设置字号
+        font.name = '仿宋'  # 设置字体
+        i.element.rPr.rFonts.set(qn('w:eastAsia'), u'仿宋')  # 设置字体
+        # run.blod = True  # 字体加粗
 
     document.add_paragraph()
     document.add_paragraph()

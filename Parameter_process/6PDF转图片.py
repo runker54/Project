@@ -13,11 +13,13 @@ def get_file(adress_):
             if os.path.splitext(docuname)[1] == '.pdf':  # 目录下包含.pdf的文件
                 pdf_dir.append(os.path.join(roots, docuname))
     print(len(pdf_dir))
+    print(pdf_dir)
 
 
 def conver_img():
     for pdf in pdf_dir:
         doc = fitz.open(pdf)
+        print(doc)
         pdf_name = os.path.splitext(pdf)[0]
         for pg in range(doc.pageCount):
             page = doc[pg]
@@ -29,7 +31,10 @@ def conver_img():
             pm = page.getPixmap(matrix=trans, alpha=False)
             pm.writePNG('%s%s.jpg' % (pdf_name, pg))
             print(pdf)
+
+
 # 拆分好的pdf位置
-sss = r"C:\Users\65680\Desktop\SNX_PDF"
+
+sss = r"C:\Users\65680\Desktop\安乐"  # PDF所在路径
 get_file(sss)
 conver_img()

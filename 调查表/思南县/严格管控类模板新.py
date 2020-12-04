@@ -340,21 +340,21 @@ def sheet(x):
     ws.write_merge(7, 7, 18, 22, '%s' % ym19, style()[0])  # 19年玉米主要品种
     ws.write_merge(8, 8, 8, 13, '%s' % sd19a, style()[0])  # 19年水稻总面积
     ws.write_merge(8, 8, 18, 22, '%s' % ym19a, style()[0])  # 19年玉米总面积
-    ws.write_merge(9, 9, 8, 13, '', style()[0])  #
-    ws.write_merge(9, 9, 18, 22, '', style()[0])  #
-    ws.write_merge(10, 10, 8, 13, '', style()[0])  #
-    ws.write_merge(10, 10, 18, 22, '', style()[0])  #
+    ws.write_merge(9, 9, 8, 13, '%s' % yc19, style()[0])  # 19年油菜品种
+    ws.write_merge(9, 9, 18, 22, '', style()[0])  # 19年小麦品种
+    ws.write_merge(10, 10, 8, 13, '%s' % yc19a, style()[0])  # 19年油菜面积
+    ws.write_merge(10, 10, 18, 22, '', style()[0])  # 19年小麦面积
     ws.write_merge(11, 11, 8, 22, '%s' % qtzyzw19, style()[0])  # 19年其他主要作物
 
     ws.write_merge(7 + 5, 7 + 5, 8, 13, '%s' % sd20, style()[0])  # 20年水稻主要品种
     ws.write_merge(7 + 5, 7 + 5, 18, 22, '%s' % ym20, style()[0])  # 20年玉米主要品种
     ws.write_merge(8 + 5, 8 + 5, 8, 13, '%s' % sd20a, style()[0])  # 20年水稻总面积
     ws.write_merge(8 + 5, 8 + 5, 18, 22, '%s' % ym20a, style()[0])  # 20年玉米总面积
-    ws.write_merge(9 + 5, 9 + 5, 8, 13, '', style()[0])  #
-    ws.write_merge(9 + 5, 9 + 5, 18, 22, '', style()[0])  #
-    ws.write_merge(10 + 5, 10 + 5, 8, 13, '', style()[0])  #
-    ws.write_merge(10 + 5, 10 + 5, 18, 22, '', style()[0])  #
-    ws.write_merge(11 + 5, 11 + 5, 8, 22, '%s' % qtzyzw20, style()[0])  # 20年其他主要作物
+    ws.write_merge(9 + 5, 9 + 5, 8, 13, '%s' % yc20, style()[0])  # 20年油菜品种
+    ws.write_merge(9 + 5, 9 + 5, 18, 22, '', style()[0])  # 20年小麦品种
+    ws.write_merge(10 + 5, 10 + 5, 8, 13, '%s' % yc20a, style()[0])  # 20年油菜面积
+    ws.write_merge(10 + 5, 10 + 5, 18, 22, '', style()[0])  # 20年小麦面积
+    ws.write_merge(11 + 5, 11 + 5, 8, 22, '%s' % qtzyzw, style()[0])  # 20年其他主要作物
 
     # 写入面积第一列
     for _p1 in range(17, 26):
@@ -389,9 +389,9 @@ def sheet(x):
     return workbook
 
 
-output_path = r'E:\台账\大方县\大方县导出资料\DFX_SHEET'
+output_path = r'C:\Users\65680\Desktop\SNX'
 
-old_path = r'E:\台账\大方县\大方导表资料\DFX20201001\DFX_20201001_dissolve.xls'
+old_path = r'E:\台账\思南县\思南县导出表格更正20201014\思南县.xls'
 
 
 old_workbook = xlrd.open_workbook(old_path)
@@ -442,17 +442,21 @@ for row_num in range(1, rows):
     rwmj = row[26].value
     sd19 = row[27].value
     sd19a = row[28].value
-    sd20 = row[29].value
-    sd20a = row[30].value
-    ym19 = row[31].value
-    ym19a = row[32].value
-    ym20 = row[33].value
-    ym20a = row[34].value
-    zbhj = row[35].value
-    qtzyzw19 = row[36].value
-    qtzyzw20 = row[37].value
+    ym19 = row[29].value
+    ym19a = row[30].value
+    yc19 = row[31].value
+    yc19a = row[32].value
+    sd20 = row[33].value
+    sd20a = row[34].value
+    ym20 = row[35].value
+    ym20a = row[36].value
+    yc20 = row[37].value
+    yc20a = row[38].value
+    zbhj = row[39].value
+    qtzyzw19 = row[40].value
+    qtzyzw = row[41].value
 
-    if zbhj == "有":
+    if zbhj == "是":
         zbhj1 = 'R'
         zbhj2 = '£'
     else:
