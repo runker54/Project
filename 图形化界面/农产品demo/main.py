@@ -13,6 +13,8 @@ import os
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QTimer, QDateTime
 import random
+
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -21,14 +23,17 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         # 按钮
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)  # 编码转换按钮
-        self.pushButton.setGeometry(QtCore.QRect(100, 330, 100, 50))
+        self.pushButton.setGeometry(QtCore.QRect(20, 320, 100, 50))
         self.pushButton.setObjectName("pushButton")
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)  # 等级评价按钮
-        self.pushButton_2.setGeometry(QtCore.QRect(100, 400, 100, 50))
+        self.pushButton_2.setGeometry(QtCore.QRect(20, 390, 100, 50))
         self.pushButton_2.setObjectName("pushButton_2")
-        self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)  # 二次编码链接按钮
-        self.pushButton_3.setGeometry(QtCore.QRect(100, 470, 100, 50))
+        self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)  # 合并单个book多个sheet按钮
+        self.pushButton_3.setGeometry(QtCore.QRect(140, 320, 100, 50))
         self.pushButton_3.setObjectName("pushButton_3")
+        self.pushButton_4 = QtWidgets.QPushButton(self.centralwidget)  # 合并单个book多个sheet按钮
+        self.pushButton_4.setGeometry(QtCore.QRect(140, 390, 100, 50))
+        self.pushButton_4.setObjectName("pushButton_4")
         # 标签
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(20, 40, 72, 15))
@@ -66,6 +71,7 @@ class Ui_MainWindow(object):
         self.pushButton.clicked.connect(MainWindow.id_change)
         self.pushButton_2.clicked.connect(MainWindow.level_calc)
         self.pushButton_3.clicked.connect(MainWindow.merge_sheet)
+        self.pushButton_4.clicked.connect(MainWindow.chose_directory)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -79,7 +85,8 @@ class Ui_MainWindow(object):
 
         self.pushButton.setText(_translate("MainWindow", "编码转换"))
         self.pushButton_2.setText(_translate("MainWindow", "等级评价"))
-        self.pushButton_3.setText(_translate("MainWindow", "表格合并"))
+        self.pushButton_3.setText(_translate("MainWindow", "单个表格合并"))
+        self.pushButton_4.setText(_translate("MainWindow", "多个表格合并"))
 
 
 class DetailUI(Ui_MainWindow, QMainWindow):
@@ -92,8 +99,10 @@ class DetailUI(Ui_MainWindow, QMainWindow):
                                 '二、等级评价\n\n'
                                 '1、表格格式为xlsx类型，作物位于第2列，Cd,Hg,As,Pb,Cr元素检测值分别位于第3，4，5，6，7列.\n\n'
                                 '2、元素检测值不能为空。\n\n'
-                                '三、表格合并\n\n'
-                                '1、传入转码后的表格实现各分包表格合并（xls格式）。')
+                                '三、单个表格合并\n\n'
+                                '1、针对一个表格内含有多个子表的情况；传入表格实现子表合并为一个表（xls类型）。\n\n'
+                                '四、多个表格合并\n\n'
+                                '1、合并同一文件夹下的所有表格包括含有子表的情况（xls类型）')
 
     def id_change(self):
         try:
@@ -158,8 +167,6 @@ class DetailUI(Ui_MainWindow, QMainWindow):
                     for id_nember, one_title in enumerate(['采样编码', '所属包', '样品类型', '二次编码']):
                         new_sheet.write(0, id_nember, one_title)
                     zky_id = random.randint(1, 47)
-
-
             new_work_book.save(new_path)
             self.textEdit.setText("所选择文件:%s转码完成！" % fname)
             self.textEdit_2.setText("输出文件路径:%s" % new_path)
@@ -247,7 +254,6 @@ class DetailUI(Ui_MainWindow, QMainWindow):
             self.textEdit_3.setText("错误原因：\n1、数据表内各元素数值存在空值！\n"
                                     "2、限量值字典不包含表格内作物。")
 
-
     def merge_sheet(self):
         try:
             fname, _ = QFileDialog.getOpenFileName(self, 'open file', '/', "Excel files (*.xls *.xlsx)")
@@ -278,6 +284,41 @@ class DetailUI(Ui_MainWindow, QMainWindow):
         except:
             self.textEdit.setText("所选择文件类型有误或表格格式不正确！")
 
+    def chose_directory(self):
+        try:
+            directory = QtWidgets.QFileDialog.getExistingDirectory(None, "选取文件夹", "C:/")  # 起始路径
+            self.textEdit.setText(directory)
+            xls_list = []
+            self.calc_list(directory, xls_list)
+            save_book = xlwt.Workbook("utf-8")
+            new_sheet = save_book.add_sheet("merge_sheet")
+            r = 1  # 开始行
+            for one_xls in xls_list:
+                read_xls = xlrd.open_workbook(one_xls)  # 打开一个xls文件
+                read_sheets = read_xls.sheets()  # 得到xls文件的所有sheet列表
+                for read_sheet in read_sheets:
+                    rows = read_sheet.nrows
+                    cols = read_sheet.ncols
+                    for one_row in range(1, rows):
+                        for one_col in range(cols):
+                            new_sheet.write(r, one_col, read_sheet.row(one_row)[one_col].value)
+                        r += 1
+            title_sheet = xlrd.open_workbook(xls_list[0]).sheets()[0]
+            for id_, title_ in enumerate([title_sheet.row(0)[zero_col].value for zero_col in range(title_sheet.ncols)]):
+                new_sheet.write(0, id_, title_)
+            new_path = os.path.join(directory, "merge_sheet.xls")
+            save_book.save(new_path)
+            self.textEdit.setText("所选择文件夹:%s下的xls文件合并完成！" % directory)
+            self.textEdit_2.setText("合并后的文件为:%s" % new_path)
+        except:
+            self.textEdit.setText("所选择文件夹不包含xls文件")
+
+    def calc_list(self, directory, xls_list):
+        for roots, dirs, files in os.walk(directory):
+            for one_file in files:
+                if one_file.endswith("xls"):
+                    one_file = os.path.join(roots, one_file)
+                    xls_list.append(one_file)
 
 
 if __name__ == "__main__":
