@@ -3,7 +3,7 @@
 
 import fitz
 import os
-
+import time
 pdf_dir = []
 
 
@@ -29,12 +29,12 @@ def conver_img():
             zoom_y = 2.0
             trans = fitz.Matrix(zoom_x, zoom_y).preRotate(rotate)
             pm = page.getPixmap(matrix=trans, alpha=False)
-            pm.writePNG('%s%s.jpg' % (pdf_name, pg))
+            pm.writePNG('%s%s.png' % (pdf_name, pg))
             print(pdf)
 
 
 # 拆分好的pdf位置
 
-sss = r"C:\Users\65680\Desktop\安乐"  # PDF所在路径
+sss = r"C:\Users\65680\Desktop\播州测产图片"  # PDF所在路径
 get_file(sss)
 conver_img()

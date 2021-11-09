@@ -14,6 +14,7 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml.ns import qn
 from docx import shared
 from docx.shared import RGBColor
+from tqdm import tqdm
 
 
 # 写入地块情况说明
@@ -102,7 +103,7 @@ def doc_(*args):
         if sd20area == 0:
             sd20nian = ""
         else:
-            sd20nian = f"玉米品种：{sd20pz}，共{sd20area}亩,"
+            sd20nian = f"水稻品种：{sd20pz}，共{sd20area}亩,"
         sd20nian.strip()
         qt20nian = ""
         if qt20.replace(' ', '') == '':
@@ -126,8 +127,8 @@ def doc_(*args):
     # 措施落实情况
     cqcs_qk = ''
     cqcs_dict = {'品种调整': pztz, '秸秆还田': jght, '深翻耕': sfg, '优化施肥': yhsf, '退耕还林还草': tghl, '土地利用变更为非农用地': bgfgd,
-                 '农户自主休耕': sgmg, '种植结构调整': zzjgtz, '叶面调控': ymtk}
-    ix = [x + ':' + cqcs_dict[x] + '亩' for x in cqcs_dict if cqcs_dict[x] != ""]
+                 '少耕免耕休耕': sgmg, '种植结构调整': zzjgtz, '叶面调控': ymtk}
+    ix = [x + ':' + str(cqcs_dict[x]) + '亩' for x in cqcs_dict if cqcs_dict[x] != ""]
 
     for one_mes in ix:
         one_mes = str(one_mes).replace(' ', '') + '，'
@@ -139,10 +140,10 @@ def doc_(*args):
 
     # 措施佐证文件情况
     ix_1 = [x for x in cqcs_dict if cqcs_dict[x] != ""]
-    zzwj_dict = {'品种调整': '佐证资料文件附件第一章', '深翻耕': '佐证资料文件见附件第四章P126-222',
-                 '优化施肥': '佐证资料文件见附件第二章', '退耕还林还草': '佐证资料文件见附件第三章',
-                 '土地利用变更为非农用地': '佐证资料文件见附件第四章', '种植结构调整': '佐证文件资料见附件第五章',
-                 '秸秆还田': '佐证文件资料见', '农户自主休耕': '佐证文件见自主休耕附件及图片', '叶面调控': '佐证文件资料见附件第六章及光盘内视频图片等资料'}
+    zzwj_dict = {'品种调整': '佐证资料文件附件第一章', '深翻耕': '佐证资料文件见附件第二章',
+                 '优化施肥': '佐证资料文件见附件第四章', '退耕还林还草': '佐证资料文件见附件第三章',
+                 '土地利用变更为非农用地': '佐证资料文件见附件第二章', '种植结构调整': '佐证文件资料见附件第五章',
+                 '秸秆还田': '佐证文件资料见', '少耕免耕休耕': '农户自主休耕佐证文件见附件第七章', '叶面调控': '佐证文件资料见附件第六章及光盘内视频图片等资料'}
     sm_list = [x + "措施" + zzwj_dict[x] + "," for x in ix_1]
     zzwj_sm = ''
     for one_cs in sm_list:
@@ -152,7 +153,7 @@ def doc_(*args):
     run6 = paragraph_wenjian.add_run(f"    {zzwj_sm}")
     document.add_paragraph()
     paragraph_shuoming = document.add_paragraph()
-    run2 = paragraph_shuoming.add_run("特此说明：")
+    run2 = paragraph_shuoming.add_run("特此说明。")
     # paragraph_shiti = document.add_paragraph()
     # run3 = paragraph_shiti.add_run("%s" % ((" ") * 46))
     #
@@ -171,7 +172,7 @@ def doc_(*args):
         # run.blod = True  # 字体加粗
     # 增加分页
     document.add_page_break()
-    print(f"写入{message[0].value}")
+    # print(f"写入{message[0].value}")
     return document
 
 
@@ -182,7 +183,7 @@ def pingmianbuzhitu(*args):
     # page_h, page_w = section.page_width, section.page_height
     # section.page_width = page_w
     # section.page_height = page_h
-    document.add_picture("%s" % tupia_dict.get(message[0].value),
+    document.add_picture("%s" % tupia_dict.get(str(message[0].value).strip(' ')),
                          width=shared.Cm(17.2), height=shared.Cm(22.8))
     # document.add_page_break()
     # section = document.add_section(start_type=WD_SECTION_START.CONTINUOUS)
@@ -198,10 +199,10 @@ def diaochabiao(**args):
     title1 = title.add_run(f'{message[0].value}')
     title1.font.color.rgb = RGBColor(0, 0, 0)
     if one_title == 0:
-        document.add_picture("%s" % diaochabiao_dict.get(message[0].value),
+        document.add_picture("%s" % diaochabiao_dict.get(str(message[0].value).strip(' ')),
                              width=shared.Cm(16.5), height=shared.Cm(20.5))  # 写入调查表
     else:
-        document.add_picture("%s" % diaochabiao_dict.get(message[0].value),
+        document.add_picture("%s" % diaochabiao_dict.get(str(message[0].value).strip(' ')),
                              width=shared.Cm(16.5), height=shared.Cm(22))  # 写入调查表
 
 
@@ -229,11 +230,11 @@ def dikuai_shuoming(*args):
                          width=shared.Cm(15), height=shared.Cm(21))  # 写入地块说明
 
 
-sheet_path = r"E:\xye\0玉屏县台账\YPX_20201201_dissolve.xls"  # 索引表格路径
-pingmiantu_path = r"E:\xye\0玉屏县台账\平面布置图_roate"  # 平面布置图路径
-xianchangtu_path = r"E:\xye\0玉屏县台账\现场图片"  # 现场图片路径
-diaochabiao_path = r"E:\xye\0玉屏县台账\调查表_cut"  # 调查表路径
-document_save_path = r'E:\xye\0玉屏县台账\乡镇文档3'  # 导出文档存储路径
+sheet_path = r"C:\Users\65680\Desktop\T30赫章县基础数据_导表_20201208.xls"  # 索引表格路径
+pingmiantu_path = r"H:\picturesHZ1\赫章县平面布置图旋转"  # 平面布置图路径
+# xianchangtu_path = r"C:\Users\65680\Desktop\新建文件夹"  # 现场图片路径
+diaochabiao_path = r"C:\Users\65680\Desktop\赫章县裁剪"  # 调查表路径
+document_save_path = r'C:\Users\65680\Desktop\赫章县文档'  # 导出文档存储路径
 
 pdf_dir = []
 diaochabiao_dict = {}
@@ -249,9 +250,9 @@ for roots, dirs, files in os.walk(pingmiantu_path):  # 收集全部平面布置�
             dk_key = re.findall(r"5\d{11}", str(one_file))[0]
             tupia_dict[dk_key] = os.path.join(roots, one_file)
 xctp_dict = {}  # 获取地块编码对应现场图片路径
-for xctp_dir in os.listdir(xianchangtu_path):
-    print("")
-    xctp_dict[xctp_dir] = os.path.join(xianchangtu_path, xctp_dir)
+# for xctp_dir in os.listdir(xianchangtu_path):
+#     print("")
+#     xctp_dict[xctp_dir] = os.path.join(xianchangtu_path, xctp_dir)
 # shuoming_dict = {}
 # for roots, dirs, files in os.walk(dikuaishuoming_path):
 #     for one_file in files:
@@ -259,7 +260,7 @@ for xctp_dir in os.listdir(xianchangtu_path):
 #             dk_key = re.findall(r"5\d{11}", str(one_file))[0]
 #             shuoming_dict[dk_key] = os.path.join(roots, one_file)
 work_book = xlrd.open_workbook(sheet_path)  # 打开工作薄
-work_sheet = work_book.sheet_by_index(2)  # 打开表格
+work_sheet = work_book.sheet_by_index(1)  # 打开表格
 
 xz_list = []
 message_list = []  # 全县总地块信息列表
@@ -270,7 +271,7 @@ for one_row in range(1, work_sheet.nrows):  # 逐一写入各个地块情况及�
     xz_list = list(set(xz_list))  # 全县乡镇列表
 print(xz_list)
 time.sleep(5)
-for one_xz in ['皂角坪街道办事处']:
+for one_xz in xz_list:
     print(one_xz)
     try:
         os.makedirs(os.path.join(r'%s' % document_save_path, "%s" % one_xz))
@@ -285,7 +286,7 @@ for one_xz in ['皂角坪街道办事处']:
     print(cz_list)
     document = Document()  # 创建空文档
     for one_cz in cz_list:
-        if os.path.exists(r"%s\%s\%s.docx" % (document_save_path, one_xz, one_cz)):
+        if os.path.exists(r"%s\%s\%s.docx" % (document_save_path, one_xz, one_xz)):
             print("文档已存在")
         else:
             # document = Document()  # 创建空文档
@@ -295,9 +296,8 @@ for one_xz in ['皂角坪街道办事处']:
             print(one_cz)
             two_message_list = list(filter(lambda x: x[3].value == one_cz, one_message_list))
             two_message_list.sort(key=lambda x: x[3].value)
-            for message in two_message_list:
+            for message in tqdm(two_message_list):
                 one_title = two_message_list.index(message)
-                print(message)
                 print(message[0].value)
                 diaochabiao()  # 写入调查表
                 doc_(message)  # 写入地块说明
@@ -307,7 +307,7 @@ for one_xz in ['皂角坪街道办事处']:
             # del document
             # print(one_cz)
             # time.sleep(3)
-    document.save(r'%s\%s.docx' % (document_save_path, one_xz))
+    document.save(r'%s\%s\%s.docx' % (document_save_path, one_xz, one_xz))
     del document
     print(one_xz)
     time.sleep(3)

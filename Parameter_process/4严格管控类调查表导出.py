@@ -223,8 +223,8 @@ def sheet(x):
     # 主体1
     ws.write_merge(7, 28, 0, 0, '调查内容', style()[6])
     ws.write_merge(6, 6, 0, 3, '周边环境', style()[0])
-    ws.write_merge(7, 11, 1, 3, '2019年作物种植情况', style()[0])
-    ws.write_merge(12, 16, 1, 3, '2020年作物种植情况', style()[0])
+    ws.write_merge(7, 11, 1, 3, '2020年作物种植情况', style()[0])
+    ws.write_merge(12, 16, 1, 3, '2021年作物种植情况', style()[0])
     ws.write_merge(17, 28, 1, 3, '采取措施', style()[5])
     # 周边环境
     ws.write_merge(6, 6, 4, 15, '2公里范围内有或曾经有工矿企业、冶炼厂', style()[1])
@@ -275,10 +275,10 @@ def sheet(x):
         ws.write(28, 7 + _x, '%s' % chaxun_dict[chaxun_list2[_x]], style()[12])
     ws.write_merge(27, 27, 4, 6, '实施时间', style()[0])
     ws.write_merge(28, 28, 4, 6, '佐证台账', style()[0])
-    ws.write_merge(27, 27, 8, 10, '2017年', style()[11])
-    ws.write_merge(27, 27, 12, 14, '2018年', style()[11])
-    ws.write_merge(27, 27, 16, 18, '2019年', style()[11])
-    ws.write_merge(27, 27, 20, 22, '2020年', style()[13])
+    ws.write_merge(27, 27, 8, 10, '2018年', style()[11])
+    ws.write_merge(27, 27, 12, 14, '2019年', style()[11])
+    ws.write_merge(27, 27, 16, 18, '2020年', style()[11])
+    ws.write_merge(27, 27, 20, 22, '2021年', style()[13])
     ws.write_merge(28, 28, 8, 10, '图片类', style()[11])
     ws.write_merge(28, 28, 12, 14, '视频类', style()[11])
     ws.write_merge(28, 28, 16, 18, '文件方案类', style()[11])
@@ -330,10 +330,11 @@ def sheet(x):
     ws.row(3).set_style(tall_1)
     for r_ in range(4, 30):
         ws.row(r_).set_style(tall)
-    ws.write_merge(4, 4, 7, 13, '%s' % dkbm, style()[0])  # 地块编号
+    # ws.write_merge(4, 4, 7, 13, '%s' % str(int(dkbm)), style()[0])  # 地块编号
+    ws.write_merge(4, 4, 7, 13, '%s' % str(dkbm), style()[0])  # 地块编号
     ws.write_merge(4, 4, 17, 22, '%s%s%s' % (qx, xz, xzc), style()[0])  # 地理位置
     ws.write_merge(5, 5, 7, 17, '北纬%s，东经%s' % (lon, lat), style()[0])  # 中心坐标
-    ws.write_merge(5, 5, 20, 22, '%s' % rwmj, style()[0])  # 面积
+    ws.write_merge(5, 5, 20, 22, '%s' % str(rwmj), style()[0])  # 面积
 
     ws.write(6, 16, '%s' % zbhj1, style()[2])  # 有
     ws.write(6, 20, '%s' % zbhj2, style()[2])  # 无
@@ -390,12 +391,12 @@ def sheet(x):
     return workbook
 
 
-output_path = r'C:\Users\65680\Desktop\YPX_SHEET1'  # 输出路径
+output_path = r"C:\Users\65680\Desktop\jiangkou"  # 输出路径
 
-old_path = r'C:\Users\65680\Desktop\YPX\YPX_20201201_dissolve.xls'  # 表格路径
+old_path = r"C:\Users\65680\Desktop\江口导表数据更新.xls"  # 表格路径
 
 old_workbook = xlrd.open_workbook(old_path)
-old_ws = old_workbook.sheet_by_index(2)
+old_ws = old_workbook.sheet_by_index(0)
 rows = old_ws.nrows
 
 for row_num in range(1, rows):
@@ -440,7 +441,7 @@ for row_num in range(1, rows):
             mj = 0
         else:
             mj = round(float(value_dict_qt[mj_value]), 1)
-            qtqk = str(mj_value) + ':' + str(value_dict_qt[mj_value] + '，')  # 各单个措施情况
+            qtqk = str(mj_value) + ':' + str(value_dict_qt[mj_value]) + '，'  # 各单个措施情况
             qtcsqk_list.append(qtqk)
         qtcsmj += mj  # 累加其它措施面积
         qtcsmj = round(qtcsmj, 1)
@@ -493,6 +494,7 @@ for row_num in range(1, rows):
         os.mkdir(czm)
     if row[6].value == '严格管控类':
         sheet('DATA').save('%s/%s%s%s-3.xls' % (czm, xz, xzc, dkbm))
+        # print(f"{int(dkbm)}")
         print(f"{dkbm}")
     else:
         print(f"{'已跳过'}")

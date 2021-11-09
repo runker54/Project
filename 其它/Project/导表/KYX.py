@@ -65,7 +65,7 @@ def set_excel_title(ws, xz):
     style_2.borders = borders
     style_2.alignment.wrap = 1
 
-    ws.write_merge(0, 0, 0, 15, '开阳县 %s 农作物种植情况调查表' % xz, style_1)
+    ws.write_merge(0, 0, 0, 15, 'mark_logo %s 农作物种植情况调查表' % xz, style_1)
     ws.write_merge(1, 1, 0, 1, '填报单位（盖章）：', style_3)
     ws.write_merge(1, 1, 3, 4, '填报人：', style_3)
     ws.write_merge(1, 1, 6, 7, '电话：', style_3)

@@ -8,7 +8,7 @@ from PIL import Image
 import time
 import os
 
-folder = r"C:\Users\65680\Desktop\merge\大坝场镇"     # 需转换成PDF的图片路径
+folder = r"C:\Users\65680\Desktop\ziliao_path\1清镇市2018-2019农业产业结构调整"     # 需转换成PDF的图片路径
 out_path = r"C:\Users\65680\Desktop\merge"  # 生成后的PDF输出路径
 
 xz_list = os.listdir(folder)
@@ -17,7 +17,7 @@ for one_xz in xz_list:
     pdf = FPDF()
     imagelist = []
     for dirpath, dirnames, filenames in os.walk(os.path.join(folder, one_xz)):
-        for filename in [f for f in filenames if f.endswith(".png")]:
+        for filename in [f for f in filenames if f.endswith(".png" or ".jpg")]:
             full_path = os.path.join(dirpath, filename)
             imagelist.append(full_path)
 

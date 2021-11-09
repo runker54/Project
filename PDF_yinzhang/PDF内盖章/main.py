@@ -10,7 +10,7 @@ from PDFSignerUI import *
 import sys
 
 if __name__ == '__main__':
-    # appctxt = ApplicationContext()
+    appctxt = ApplicationContext()
 
     appWin = QMainWindow()
     pdfSignerUI = Ui_MainWindow()

@@ -19,12 +19,14 @@ def doc2pdf(input_file):
 
 
 if __name__ == "__main__":
-    directory = r"C:\Users\65680\Desktop\石阡县"
+    directory = r'I:\0开阳县台账\开阳县台账文旦导出（20201214修改后已整理）\开阳县Word'
     for root, dirs, filenames in os.walk(directory):
         for file in filenames:
-            if file.endswith(".doc") or file.endswith(".docx"):
-                if 'HS' in str(file):
-                    print(file)
-                else:
-                    doc2pdf(os.path.join(root, file))
-                    print(file)
+            # if file.endswith(".doc") or file.endswith(".docx"):
+            if '$' not in file:
+                print(file)
+                # x = str(input("是否需要转换："))
+                # if x == "1":
+                doc2pdf(os.path.join(root, file))
+                print(file)
+

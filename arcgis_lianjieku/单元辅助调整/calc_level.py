@@ -1,7 +1,4 @@
 # coding:utf-8
-
-
-
 def calc(a1, x1, x2, x3, total, ysdy):
     a1 = int(a1)
     x1 = int(x1)

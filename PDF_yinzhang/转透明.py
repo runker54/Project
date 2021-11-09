@@ -23,6 +23,6 @@ def transparent_back(img):
 
 
 if __name__ == '__main__':
-    img = Image.open(r'C:\Users\65680\Desktop\P1.png')
+    img = Image.open(r'C:\Users\65680\Desktop\LC.png')
     img = transparent_back(img)
-    img.save(r'C:\Users\65680\Desktop\P11.png')
+    img.save(r'C:\Users\65680\Desktop\P222.png')

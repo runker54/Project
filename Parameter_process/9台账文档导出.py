@@ -59,6 +59,7 @@ def doc_(*args):
     fontT.name = '仿宋'
     document.add_paragraph()
 
+
     # title_T.element.rPr.rFonts.set(qn('w:eastAsia'), u'仿宋')
     # 2019年作物种植情况
     def qingkuang2019(ym19area, sd19area, qt19):

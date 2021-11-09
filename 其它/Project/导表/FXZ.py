@@ -116,7 +116,7 @@ def su_total(data_path, output_path, so_id, index):
             style_2.alignment = a_1
             style_2.alignment.wrap = 1
 
-            ws.write_merge(0, 0, 0, 15, '开阳县%s农作物种植情况调查表' % a, style_1)
+            ws.write_merge(0, 0, 0, 15, 'mark_logo%s农作物种植情况调查表' % a, style_1)
             ws.write_merge(1, 1, 0, 1, '填报单位（盖章）：', style_3)
             ws.write_merge(1, 1, 3, 4, '填报人：', style_3)
             ws.write_merge(1, 1, 6, 7, '电话：', style_3)

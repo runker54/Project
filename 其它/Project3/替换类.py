@@ -8,7 +8,7 @@ from win32com.client import Dispatch
 
 
 # 处理Word文档的类
-class RemoteWord:
+class RemoteWord(object):
     def __init__(self, filename=None):
         self.xlApp = win32com.client.Dispatch('Word.Application')  # 此处使用的是Dispatch，DispatchEx
         self.xlApp.Visible = 0  # 后台运行，不显示
