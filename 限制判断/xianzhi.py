@@ -3,8 +3,7 @@
 # Date:2021-10-28
 # Author:Runker54
 # ----------------------
-import re
-import time
+
 import openpyxl
 import os
 
@@ -21,12 +20,13 @@ xdpc_dict = {"Cd": [0.1, 35, 35, 0.2, 30, 25],
              "Hg": [0.1, 35, 35, 0.2, 30, 25],
              "As": [0.1, 35, 35, 0.2, 30, 25],
              "Pb": [0.1, 35, 35, 1.0, 30, 25],
-             "Cr": [0.1, 35, 35, 1.0, 30, 25]}
+             "Cr": [0.1, 35, 35, 1.0, 30, 25],
+             }
 
-fdir_path = r"C:\Users\65680\Desktop\test"
-data_shuju_path = r"C:\Users\65680\Desktop\test\纳雍县数据.xlsx"  # 数据表路径
-data_bianma_path = r"C:\Users\65680\Desktop\test\纳雍县质控点位表.xlsx"  # 质控点位表路径
-data_biaozhun_path = r"C:\Users\65680\Desktop\test\标准物质.xlsx"  # 标准物质路径
+fdir_path = r"C:\Users\65680\Desktop\测试"
+data_shuju_path = r"C:\Users\65680\Desktop\测试\1荔波县数据.xlsx"  # 数据表路径
+data_bianma_path = r"C:\Users\65680\Desktop\测试\2荔波质控点位表.xlsx"  # 质控点位表路径
+data_biaozhun_path = r"C:\Users\65680\Desktop\测试\3标准物质.xlsx"  # 标准物质路径
 w_b = openpyxl.load_workbook(data_shuju_path)
 w_b_zk = openpyxl.load_workbook(data_bianma_path)
 w_s_zk = w_b_zk.active
@@ -65,7 +65,7 @@ for zk_row in range(2, b_rows + 1):
     erci_bianma[f"{w_s_zk.cell(zk_row, 2).value}"] = w_s_zk.cell(zk_row, 1).value
     if w_s_zk.cell(zk_row, 3).value is not None:
         zk_dict[f"{w_s_zk.cell(zk_row, 2).value}"] = w_s_zk.cell(zk_row, 3).value
-title_list = ["Cd_level", "Hg_level", "As_level", "Pb_level", "Cr_level", "原始编码"]
+title_list = ["Cd_level", "Hg_level", "As_level", "Pb_level", "Cr_level", "Se_level", "Ge_level", "原始编码"]
 r = 13
 # 写入抬头
 for _i in title_list:
@@ -77,15 +77,17 @@ level_data_dict = {}
 zk_list = []
 for one_row in range(2, rows + 1):
     # 写入原始编码
-    w_s.cell(one_row, 18).value = str(erci_bianma[w_s.cell(one_row, 4).value])
+    w_s.cell(one_row, 20).value = str(erci_bianma[w_s.cell(one_row, 4).value])
     # 取值
     cd_v = w_s[f"F{one_row}"].value if type(w_s[f"F{one_row}"].value) is not str else 0  # 镉
     hg_v = w_s[f"G{one_row}"].value if type(w_s[f"G{one_row}"].value) is not str else 0  # 汞
     as_v = w_s[f"H{one_row}"].value if type(w_s[f"H{one_row}"].value) is not str else 0  # 砷
     pb_v = w_s[f"I{one_row}"].value if type(w_s[f"I{one_row}"].value) is not str else 0  # 铅
     cr_v = w_s[f"J{one_row}"].value if type(w_s[f"J{one_row}"].value) is not str else 0  # 镉
+    se_v = w_s[f"J{one_row}"].value if type(w_s[f"J{one_row}"].value) is not str else 0  # 硒
+    ge_v = w_s[f"J{one_row}"].value if type(w_s[f"J{one_row}"].value) is not str else 0  # 锗
 
-    s_v = {"Cd": cd_v, "Hg": hg_v, "As": as_v, "Pb": pb_v, "Cr": cr_v}
+    s_v = {"Cd": cd_v, "Hg": hg_v, "As": as_v, "Pb": pb_v, "Cr": cr_v, "Se": se_v, "Ge": ge_v}
     yplb = w_s[f"E{one_row}"].value  # 样品类型
     cd_mv = cache_dict[yplb]["Cd"]  # 镉值
     hg_mv = cache_dict[yplb]["Hg"]  # 汞值
@@ -104,6 +106,8 @@ for one_row in range(2, rows + 1):
         else:
             level = 3
         w_s.cell(one_row, rows_).value = level
+        w_s.cell(one_row, rows_ + 1).value = "-"
+        w_s.cell(one_row, rows_ + 2).value = "-"
         rows_ += 1
     # 搜集等级数据、包名、值等  变量名 level_data_dict   质控数据变量名  zk_list
 
@@ -114,25 +118,29 @@ for one_row in range(2, rows + 1):
                                          w_s.cell(one_row, 15).value,
                                          w_s.cell(one_row, 16).value,
                                          w_s.cell(one_row, 17).value,
+                                         w_s.cell(one_row, 18).value,
+                                         w_s.cell(one_row, 19).value,
                                          w_s.cell(one_row, 6).value,
                                          w_s.cell(one_row, 7).value,
                                          w_s.cell(one_row, 8).value,
                                          w_s.cell(one_row, 9).value,
                                          w_s.cell(one_row, 10).value,
+                                         w_s.cell(one_row, 11).value,
+                                         w_s.cell(one_row, 12).value,
                                          w_s.cell(one_row, 1).value,
-                                         w_s.cell(one_row, 18).value,
+                                         w_s.cell(one_row, 20).value,
                                          w_s.cell(one_row, 4).value,
                                          zk_dict[w_s.cell(one_row, 4).value]]
             zk_list.append(level_data_dict[one_data])
 bao_list = []
 for one_element in level_data_dict:
-    bao_list.append(level_data_dict[one_element][10])
+    bao_list.append(level_data_dict[one_element][14])
 bao_xunhuan_list = list(set(bao_list))
 px_s = w_b.create_sheet("平行样质控")
 bz_s = w_b.create_sheet("标准物质质控")
 # 写入该表抬头
-px_title = ["项目", "cd_level", "hg_level", "as_level", "pb_level", "cr_level", "cd_level", "hg_level",
-            "as_level", "pb_level", "cr_level", "包名", "原始编码", "二次编码", "样品类型"]
+px_title = ["项目", "cd_level", "hg_level", "as_level", "pb_level", "cr_level", "se_level", "ge_level", "cd_value",
+            "hg_value", "as_value", "pb_value", "cr_value", "se_value", "ge_value", "包名", "原始编码", "二次编码", "样品类型"]
 for _number, one_i in enumerate(px_title):
     px_s.cell(1, _number + 1).value = one_i
     bz_s.cell(1, _number + 1).value = one_i
@@ -141,8 +149,8 @@ px_r = 2  # 平行样行控制
 for one_bao in bao_xunhuan_list:  # 按包名循环值
     rr = 0
     for one_list in zk_list:  # 在数据列表中寻找
-        if one_list[10] == one_bao:  # 数据列表中找到指定包名数据
-            if one_list[13].strip() != "标准物质":  # 标准物质数据写入及判断
+        if one_list[14] == one_bao:  # 数据列表中找到指定包名数据
+            if one_list[17].strip() != "标准物质":  # 标准物质数据写入及判断
                 rr += 1
                 for px_number, px_row in enumerate(one_list):
                     px_s.cell(px_r, px_number + 2).value = px_row
@@ -150,25 +158,26 @@ for one_bao in bao_xunhuan_list:  # 按包名循环值
                     px_r += 3
                     px_s.cell(px_r - 2, 1).value = "一致性及相对偏差"
                     # 相对偏差对比  收集两列的数值  upv_list  downv_list
-                    upv_list = [px_s.cell(px_r - 4, _upv).value for _upv in range(7, 12)]
-                    downv_list = [px_s.cell(px_r - 3, _downv).value for _downv in range(7, 12)]
+                    upv_list = [px_s.cell(px_r - 4, _upv).value for _upv in range(9, 16)]
+                    downv_list = [px_s.cell(px_r - 3, _downv).value for _downv in range(9, 16)]
                     for upv_number, onev_up in enumerate(upv_list):
                         try:
                             pc_v = abs(onev_up - downv_list[upv_number]) / (onev_up + downv_list[upv_number]) * 100
-                            px_s.cell(px_r - 2, upv_number + 7).value = pc_v
+                            px_s.cell(px_r - 2, upv_number + 9).value = pc_v
                         except:
-                            px_s.cell(px_r - 2, upv_number + 7).value = "\\"
+                            px_s.cell(px_r - 2, upv_number + 9).value = "\\"
                     # 一致性对比  收集两列的等级值  up_list  down_list
-                    up_list = [px_s.cell(px_r - 4, _up).value for _up in range(2, 7)]
-                    down_list = [px_s.cell(px_r - 3, _down).value for _down in range(2, 7)]
+                    up_list = [px_s.cell(px_r - 4, _up).value for _up in range(2, 9)]
+                    down_list = [px_s.cell(px_r - 3, _down).value for _down in range(2, 9)]
                     for up_number, one_up in enumerate(up_list):
                         if down_list[up_number] != one_up:
                             px_s.cell(px_r - 2, up_number + 2).value = "不一致"
-                            pc_mv = px_s.cell(px_r - 2, up_number + 7).value
-                            yuansu_dict = {2: "Cd", 3: "Hg", 4: "As", 5: "Pb", 6: "Cr"}
+                            pc_mv = px_s.cell(px_r - 2, up_number + 9).value
+                            yuansu_dict = {2: "Cd", 3: "Hg", 4: "As", 5: "Pb", 6: "Cr", 7: "Se", 8: "Ge"}
                             yuansu = yuansu_dict[up_number + 2]  # 判定为什么元素
-                            yuansuzhi = max([px_s.cell(px_r - 3, up_number + 7).value,
-                                             px_s.cell(px_r - 4, up_number + 7).value])  # 两个元素的最大值
+
+                            yuansuzhi = max([px_s.cell(px_r - 3, up_number + 9).value,
+                                             px_s.cell(px_r - 4, up_number + 9).value])  # 两个元素的最大值
                             # 与第一个对比
                             pc_xianzhi = 0
                             if yuansuzhi < xdpc_dict[yuansu][0]:
@@ -177,25 +186,75 @@ for one_bao in bao_xunhuan_list:  # 按包名循环值
                                 pc_xianzhi = xdpc_dict[yuansu][4]
                             else:
                                 pc_xianzhi = xdpc_dict[yuansu][5]
+
                             if pc_mv < pc_xianzhi:
-                                px_s.cell(px_r - 1, up_number + 7).value = "合格"
+                                px_s.cell(px_r - 1, up_number + 9).value = "合格"
                             else:
-                                px_s.cell(px_r - 1, up_number + 7).value = "不合格"
+                                px_s.cell(px_r - 1, up_number + 9).value = "不合格"
                         else:
                             px_s.cell(px_r - 2, up_number + 2).value = "一致"
-                            px_s.cell(px_r - 1, up_number + 7).value = "合格"
+                            px_s.cell(px_r - 1, up_number + 9).value = "合格"
                     px_s.cell(px_r - 1, 1).value = "是否合格"
                 else:
                     px_r += 1
             else:
                 # 标准物质编号
-                bz_s.cell(bz_r+1, 1).value = "标准物质含量"
-                bz_bh = one_list[11]
-                bz_data = bz_message["农产品"][bz_bh][:5]
+                bz_s.cell(bz_r + 1, 1).value = "标准物质含量"
+                bz_s.cell(bz_r, 1).value = "原始值"
+                bz_bh = one_list[15]
+                bz_data = bz_message["农产品"][bz_bh][:7]
+                # 写入标准物质检测值
                 for bz_number, bz_row in enumerate(one_list):
                     bz_s.cell(bz_r, bz_number + 2).value = bz_row
+                bz_s.cell(bz_r + 2, 1).value = "相对偏差值"
+                bz_s.cell(bz_r + 3, 1).value = "是否合格"
+                # 写入标准物质参考值
                 for one_bz, bz_nn in enumerate(bz_data):
-                    bz_s.cell(bz_r+1, one_bz+7).value = bz_nn
-                bz_r += 3
+
+                    # 对应元素值
+                    yuansu_vv = bz_s.cell(bz_r, one_bz + 9).value
+                    # 标准物质值
+                    bz_s.cell(bz_r + 1, one_bz + 9).value = bz_nn
+                    # 判断为何种元素
+                    yuansu_bvdict = {2: "Cd", 3: "Hg", 4: "As", 5: "Pb", 6: "Cr", 7: "Se", 8: "Ge"}
+                    yuansu_bv = yuansu_bvdict[one_bz + 2]
+                    if yuansu_bv in ["Se","Ge"]:
+                        bz_s.cell(bz_r + 3, one_bz + 9).value = "-"
+                    else:
+                        # 元素值的相对偏差参考值获取
+                        pcbv_xianzhi = 0
+                        if yuansu_vv < xdpc_dict[yuansu_bv][0]:
+                            pcbv_xianzhi = xdpc_dict[yuansu_bv][1]
+                        elif yuansu_vv < xdpc_dict[yuansu_bv][3]:
+                            pcbv_xianzhi = xdpc_dict[yuansu_bv][4]
+                        else:
+                            pcbv_xianzhi = xdpc_dict[yuansu_bv][5]
+                        # 判断使用何种方法做计算
+                        # 第一种含 ± 号值
+                        if "±" in str(bz_nn):
+                            left_v = float(str(bz_nn)[:str(bz_nn).find("±")])
+                            right_v = float(str(bz_nn)[str(bz_nn).find("±") + 1:])
+                            up_bv, down_bv = left_v - right_v, left_v + right_v
+                            # 元素值与前值的相对偏差
+                            bz_xdpc = abs(yuansu_vv - left_v) / (yuansu_vv + left_v) * 100
+                            bz_s.cell(bz_r + 2, one_bz + 9).value = bz_xdpc
+                            # 判断方法，判定是否在范围值内,或判定与前值的相对偏差是否合理
+                            if ((yuansu_vv <= up_bv) and (yuansu_vv >= down_bv)) or (bz_xdpc < pcbv_xianzhi):
+                                bz_s.cell(bz_r + 3, one_bz + 9).value = "合格"
+                            else:
+                                bz_s.cell(bz_r + 3, one_bz + 9).value = "不合格"
+
+                        # 第二中含（）值
+                        if "-" in str(bz_nn):
+                            # 参考值
+                            bz_bv = float(str(bz_nn).strip("-"))
+                            # 相对偏差值
+                            bz_xdpcer = abs(yuansu_vv - bz_bv) / (yuansu_vv + bz_bv) * 100
+                            bz_s.cell(bz_r + 2, one_bz+9).value = bz_xdpcer
+                            if bz_xdpcer < pcbv_xianzhi:
+                                bz_s.cell(bz_r + 3, one_bz + 9).value = "合格"
+                            else:
+                                bz_s.cell(bz_r + 3, one_bz + 9).value = "不合格"
+                bz_r += 4
 
 w_b.save(os.path.join(fdir_path, "等级判定结果.xlsx"))
