@@ -9,13 +9,13 @@ import paramiko
 import openpyxl
 
 data_path = r"C:\Users\65680\Desktop\dict.xlsx"
-local_dir = r"C:\Users\65680\Desktop\CCC"
+local_dir = r"F:\从江县2020年耕地生产障碍修复利用项目台账资料\12.联合攻关区集中推进区样品采集\从江县样品采集图片"
 USERNAME = "root"
-PASSWORD = "cyst1Q!Q"
-HOST = "8.135.110.238"
+PASSWORD = ""
+HOST = ""
 PORT = 22
 work_b = openpyxl.load_workbook(data_path)
-wb = work_b.active
+wb = work_b["从江县"]
 rows = wb.max_row
 adres_dict = {"east": "东", "south": "南", "west": "西", "north": "北", "gps": "GPS", "director": "负责人",
               "center": "中心点采样过程", "offset1": "偏移证明", "offset2": "偏移证明1", "other": "其它", "soilcenter": "中心点采样过程", }
