@@ -184,26 +184,34 @@ class DetailUI(Ui_MainWindow, QMainWindow):
                 ge_v = w_s[f"J{one_row}"].value if type(w_s[f"J{one_row}"].value) is not str else 0  # 锗
 
                 s_v = {"Cd": cd_v, "Hg": hg_v, "As": as_v, "Pb": pb_v, "Cr": cr_v, "Se": se_v, "Ge": ge_v}
-                yplb = w_s[f"E{one_row}"].value  # 样品类型
-                cd_mv = cache_dict[yplb]["Cd"]  # 镉值
-                hg_mv = cache_dict[yplb]["Hg"]  # 汞值
-                as_mv = cache_dict[yplb]["As"]  # 铅值
-                pb_mv = cache_dict[yplb]["Pb"]  # 砷值
-                cr_mv = cache_dict[yplb]["Cr"]  # 铬值
-                s_mv = {"Cd": cd_mv, "Hg": hg_mv, "As": as_mv, "Pb": pb_mv, "Cr": cr_mv}
-                #  判断
-                rows_ = 13
-                for index_, one_cell in enumerate(["Cd", "Hg", "As", "Pb", "Cr"]):
-                    if s_v[one_cell] <= s_mv[one_cell]:
-                        level = 1
-                    elif s_v[one_cell] <= 2 * s_mv[one_cell]:
-                        level = 2
-                    else:
-                        level = 3
-                    w_s.cell(one_row, rows_).value = level
-                    w_s.cell(one_row, rows_ + 1).value = "-"
-                    w_s.cell(one_row, rows_ + 2).value = "-"
-                    rows_ += 1
+                try:
+                    yplb = w_s[f"E{one_row}"].value  # 样品类型
+                    cd_mv = cache_dict[yplb]["Cd"]  # 镉值
+                    hg_mv = cache_dict[yplb]["Hg"]  # 汞值
+                    as_mv = cache_dict[yplb]["As"]  # 铅值
+                    pb_mv = cache_dict[yplb]["Pb"]  # 砷值
+                    cr_mv = cache_dict[yplb]["Cr"]  # 铬值
+                    s_mv = {"Cd": cd_mv, "Hg": hg_mv, "As": as_mv, "Pb": pb_mv, "Cr": cr_mv}
+                    #  判断
+                    rows_ = 13
+                    for index_, one_cell in enumerate(["Cd", "Hg", "As", "Pb", "Cr"]):
+                        if s_v[one_cell] <= s_mv[one_cell]:
+                            level = 1
+                        elif s_v[one_cell] <= 2 * s_mv[one_cell]:
+                            level = 2
+                        else:
+                            level = 3
+                        w_s.cell(one_row, rows_).value = level
+                        w_s.cell(one_row, rows_ + 1).value = "-"
+                        w_s.cell(one_row, rows_ + 2).value = "-"
+                        rows_ += 1
+                except:
+                    rows1_ = 13
+                    for _i in ["Cd", "Hg", "As", "Pb", "Cr"]:
+                        w_s.cell(one_row, rows1_).value = "缺少评判标准"
+                        w_s.cell(one_row, rows1_ + 1).value = "-"
+                        w_s.cell(one_row, rows1_ + 2).value = "-"
+                        rows1_ += 1
                 # 搜集等级数据、包名、值等  变量名 level_data_dict   质控数据变量名  zk_list
 
                 for one_data in zk_dict:
