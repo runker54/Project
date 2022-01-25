@@ -108,14 +108,14 @@ class DetailUI(Ui_MainWindow, QMainWindow):
                       "高粱": {"Cd": 0.1, "Hg": 0.02, "As": 0.5, "Pb": 0.2, "Cr": 1},
                       "辣椒": {"Cd": 0.05, "Hg": 0.01, "As": 0.5, "Pb": 0.2, "Cr": 1},
                       "红薯": {"Cd": 0.1, "Hg": 0.01, "As": 0.5, "Pb": 0.2, "Cr": 0.5},
-                      "茄子": {"Cd": 0.05, "Hg": 0.01, "As": 0.5, "Pb": 0.1, "Cr": 0.5}}
+                      "茄子": {"Cd": 0.05, "Hg": 0.01, "As": 0.5, "Pb": 0.1, "Cr": 0.5},
+                      "魔芋": {"Cd": 0.1, "Hg": 0.01, "As": 0.5, "Pb": 0.2, "Cr": 0.5}}
         # 相对偏差字典
         xdpc_dict = {"Cd": [0.1, 35, 35, 0.2, 30, 25],
                      "Hg": [0.1, 35, 35, 0.2, 30, 25],
                      "As": [0.1, 35, 35, 0.2, 30, 25],
                      "Pb": [0.1, 35, 35, 1.0, 30, 25],
-                     "Cr": [0.1, 35, 35, 1.0, 30, 25],
-                     }
+                     "Cr": [0.1, 35, 35, 1.0, 30, 25]}
         try:
             fname, _ = QFileDialog.getOpenFileName(self, '选择数据表', '/', "Excel files (*.xlsx)")
             fname1, _ = QFileDialog.getOpenFileName(self, '选择质控点位表', '/', "Excel files (*.xlsx)")

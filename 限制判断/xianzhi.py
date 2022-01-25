@@ -14,7 +14,10 @@ cache_dict = {"水稻": {"Cd": 0.2, "Hg": 0.02, "As": 0.5, "Pb": 0.2, "Cr": 1},
               "薏仁米": {"Cd": 0.1, "Hg": 0.02, "As": 0.5, "Pb": 0.2, "Cr": 1},
               "小麦": {"Cd": 0.1, "Hg": 0.02, "As": 0.5, "Pb": 0.2, "Cr": 1},
               "豆类": {"Cd": 0.1, "Hg": 0.01, "As": 0.5, "Pb": 0.2, "Cr": 1},
-              "高粱": {"Cd": 0.1, "Hg": 0.02, "As": 0.5, "Pb": 0.2, "Cr": 1}}
+              "高粱": {"Cd": 0.1, "Hg": 0.02, "As": 0.5, "Pb": 0.2, "Cr": 1},
+              "辣椒": {"Cd": 0.05, "Hg": 0.01, "As": 0.5, "Pb": 0.2, "Cr": 1},
+              "红薯": {"Cd": 0.1, "Hg": 0.01, "As": 0.5, "Pb": 0.2, "Cr": 0.5},
+              "茄子": {"Cd": 0.05, "Hg": 0.01, "As": 0.5, "Pb": 0.1, "Cr": 0.5}}
 # 相对偏差字典
 xdpc_dict = {"Cd": [0.1, 35, 35, 0.2, 30, 25],
              "Hg": [0.1, 35, 35, 0.2, 30, 25],
@@ -23,10 +26,10 @@ xdpc_dict = {"Cd": [0.1, 35, 35, 0.2, 30, 25],
              "Cr": [0.1, 35, 35, 1.0, 30, 25],
              }
 
-fdir_path = r"C:\Users\65680\Desktop\测试"
-data_shuju_path = r"C:\Users\65680\Desktop\测试\1荔波县数据.xlsx"  # 数据表路径
-data_bianma_path = r"C:\Users\65680\Desktop\测试\2荔波质控点位表.xlsx"  # 质控点位表路径
-data_biaozhun_path = r"C:\Users\65680\Desktop\测试\3标准物质.xlsx"  # 标准物质路径
+fdir_path = r"E:\GisWorkSpace\提交资料20211111\从江县\从江县检测数据_农产品_1126"
+data_shuju_path = r"E:\GisWorkSpace\提交资料20211111\从江县\从江县检测数据_农产品_1126\1从江县数据.xlsx"  # 数据表路径
+data_bianma_path = r"E:\GisWorkSpace\提交资料20211111\从江县\从江县检测数据_农产品_1126\2质控点位表.xlsx"  # 质控点位表路径
+data_biaozhun_path = r"E:\GisWorkSpace\提交资料20211111\从江县\从江县检测数据_农产品_1126\3标准物质.xlsx"  # 标准物质路径
 w_b = openpyxl.load_workbook(data_shuju_path)
 w_b_zk = openpyxl.load_workbook(data_bianma_path)
 w_s_zk = w_b_zk.active
@@ -88,27 +91,36 @@ for one_row in range(2, rows + 1):
     ge_v = w_s[f"J{one_row}"].value if type(w_s[f"J{one_row}"].value) is not str else 0  # 锗
 
     s_v = {"Cd": cd_v, "Hg": hg_v, "As": as_v, "Pb": pb_v, "Cr": cr_v, "Se": se_v, "Ge": ge_v}
-    yplb = w_s[f"E{one_row}"].value  # 样品类型
-    cd_mv = cache_dict[yplb]["Cd"]  # 镉值
-    hg_mv = cache_dict[yplb]["Hg"]  # 汞值
-    as_mv = cache_dict[yplb]["As"]  # 铅值
-    pb_mv = cache_dict[yplb]["Pb"]  # 砷值
-    cr_mv = cache_dict[yplb]["Cr"]  # 铬值
-    s_mv = {"Cd": cd_mv, "Hg": hg_mv, "As": as_mv, "Pb": pb_mv, "Cr": cr_mv}
-    level = 0
-    #  判断
-    rows_ = 13
-    for index_, one_cell in enumerate(["Cd", "Hg", "As", "Pb", "Cr"]):
-        if s_v[one_cell] <= s_mv[one_cell]:
-            level = 1
-        elif s_v[one_cell] <= 2 * s_mv[one_cell]:
-            level = 2
-        else:
-            level = 3
-        w_s.cell(one_row, rows_).value = level
-        w_s.cell(one_row, rows_ + 1).value = "-"
-        w_s.cell(one_row, rows_ + 2).value = "-"
-        rows_ += 1
+    try:
+        yplb = w_s[f"E{one_row}"].value  # 样品类型
+        cd_mv = cache_dict[yplb]["Cd"]  # 镉值
+        hg_mv = cache_dict[yplb]["Hg"]  # 汞值
+        as_mv = cache_dict[yplb]["As"]  # 铅值
+        pb_mv = cache_dict[yplb]["Pb"]  # 砷值
+        cr_mv = cache_dict[yplb]["Cr"]  # 铬值
+        s_mv = {"Cd": cd_mv, "Hg": hg_mv, "As": as_mv, "Pb": pb_mv, "Cr": cr_mv}
+        level = 0
+        #  判断
+        rows_ = 13
+        for index_, one_cell in enumerate(["Cd", "Hg", "As", "Pb", "Cr"]):
+            if s_v[one_cell] <= s_mv[one_cell]:
+                level = 1
+            elif s_v[one_cell] <= 2 * s_mv[one_cell]:
+                level = 2
+            else:
+                level = 3
+            w_s.cell(one_row, rows_).value = level
+            w_s.cell(one_row, rows_ + 1).value = "-"
+            w_s.cell(one_row, rows_ + 2).value = "-"
+            rows_ += 1
+    except:
+        rows_ = 13
+        for index_, one_cell in enumerate(["Cd", "Hg", "As", "Pb", "Cr"]):
+            w_s.cell(one_row, rows_).value = "缺少评判标准"
+            w_s.cell(one_row, rows_ + 1).value = "-"
+            w_s.cell(one_row, rows_ + 2).value = "-"
+            rows_ += 1
+
     # 搜集等级数据、包名、值等  变量名 level_data_dict   质控数据变量名  zk_list
 
     for one_data in zk_dict:
@@ -212,13 +224,13 @@ for one_bao in bao_xunhuan_list:  # 按包名循环值
                 for one_bz, bz_nn in enumerate(bz_data):
 
                     # 对应元素值
-                    yuansu_vv = bz_s.cell(bz_r, one_bz + 9).value
+                    yuansu_vv = bz_s.cell(bz_r, one_bz + 9).value if type(bz_s.cell(bz_r, one_bz + 9).value) is not str else 0
                     # 标准物质值
                     bz_s.cell(bz_r + 1, one_bz + 9).value = bz_nn
                     # 判断为何种元素
                     yuansu_bvdict = {2: "Cd", 3: "Hg", 4: "As", 5: "Pb", 6: "Cr", 7: "Se", 8: "Ge"}
                     yuansu_bv = yuansu_bvdict[one_bz + 2]
-                    if yuansu_bv in ["Se","Ge"]:
+                    if yuansu_bv in ["Se", "Ge"]:
                         bz_s.cell(bz_r + 3, one_bz + 9).value = "-"
                     else:
                         # 元素值的相对偏差参考值获取
@@ -257,4 +269,4 @@ for one_bao in bao_xunhuan_list:  # 按包名循环值
                                 bz_s.cell(bz_r + 3, one_bz + 9).value = "不合格"
                 bz_r += 4
 
-w_b.save(os.path.join(fdir_path, "等级判定结果.xlsx"))
+w_b.save(os.path.join(fdir_path, "从江县等级判定结果20211128.xlsx"))

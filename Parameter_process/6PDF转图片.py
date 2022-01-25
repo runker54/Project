@@ -35,6 +35,6 @@ def conver_img():
 
 # 拆分好的pdf位置
 
-sss = r"C:\Users\65680\Desktop\播州测产图片"  # PDF所在路径
+sss = r"C:\Users\65680\Desktop\湄潭县图片"  # PDF所在路径
 get_file(sss)
 conver_img()

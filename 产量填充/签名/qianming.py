@@ -5,7 +5,7 @@
 # ----------------------
 
 name_path = r"C:\Users\65680\Desktop\name_path"
-doc_path = r"C:\Users\65680\Desktop\玉屏县2021年受污染耕地安全利用项目采样记录表.docx"
+doc_path = r"C:\Users\65680\Desktop\生成Word文档\JK004728_JK004728.docx"
 from docx import Document
 from docx.shared import Inches,Cm,Pt
 from docx.oxml.ns import qn

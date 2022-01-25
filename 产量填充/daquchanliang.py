@@ -16,13 +16,13 @@ from openpyxl.drawing.image import Image
 import time
 
 dir_path = r"C:\Users\65680\Desktop\大区测产"
-image_path = r"C:\Users\65680\Desktop\播州测产图片"
+image_path = r"C:\Users\65680\Desktop\湄潭县图片"
 # 信息字典
 # 折干率
 
-source_xls = r"C:\Users\65680\Desktop\播州测产信息111.xlsx"
+source_xls = r"C:\Users\65680\Desktop\湄潭县.xlsx"
 source_work_book = openpyxl.load_workbook(source_xls)
-ws = source_work_book['大区测产信息']
+ws = source_work_book['大区']
 rows = ws.max_row
 for one_row in range(2, rows + 1):
     moban_xls = r"C:\Users\65680\Desktop\大区.xlsx"
@@ -78,7 +78,7 @@ for one_row in range(2, rows + 1):
     ws[f"N{one_row}"].value = zmc
     # 验收图形
     image_key = ws[f"D{one_row}"].value
-    img = Image(os.path.join(image_path, f"T_{image_key}0.png"))
+    img = Image(os.path.join(image_path, f"无标题_{image_key}0.png"))
     img.width = 722
     img.height = 601
     ws_mb.add_image(img, "B9")
@@ -86,4 +86,4 @@ for one_row in range(2, rows + 1):
     ws_mb["M11"].value = xqmj
     source_mb_work_book.save(os.path.join(dir_path, f"{tkbh}-{ws.cell(one_row, 1).value}.xlsx"))
 
-source_work_book.save(r"C:\Users\65680\Desktop\播州测产信息_大区.xlsx")
+source_work_book.save(r"C:\Users\65680\Desktop\湄潭测产信息_大区.xlsx")

@@ -7,11 +7,11 @@ import time
 import os
 
 # 读取数据
-adress_path = r"C:\Users\65680\Desktop\罗甸县第五章"
+adress_path = r"C:\Users\65680\Desktop"
 # name = "玉米品种筛选小区"
-data1 = pd.ExcelFile(r"C:\Users\65680\Desktop\第五章数据分析之排序-罗甸县.xls")
-writer = pd.ExcelWriter(os.path.join(adress_path, "技术筛选.xlsx"))
-for name in ["品种筛选小区", "品种筛选大区", "叶面调控小区", "叶面调控大区", "原位钝化小区", "原位钝化大区", "综合技术小区", "综合技术大区", "优化施肥小区", "优化施肥大区", ]:
+data1 = pd.ExcelFile(r"C:\Users\65680\Desktop\第五章表格(1).xlsx")
+writer = pd.ExcelWriter(os.path.join(adress_path, "优化施肥试验.xlsx"))
+for name in ["水稻优化施肥小区", "水稻优化施肥大区","玉米优化施肥小区", "玉米优化施肥大区"]:
     data = data1.parse("%s" % name)
     data.set_index(['材料'], inplace=True)
     # 总指标数

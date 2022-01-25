@@ -7,11 +7,11 @@ import os
 import paramiko
 import openpyxl
 
-data_path = r"D:\P_path\数据下载\dict1.xlsx"
-local_dir = r"D:\dir"
+data_path = r"C:\Users\65680\Desktop\样品采集名单\地址表格20211129.xlsx"
+local_dir = r"C:\Users\65680\Desktop\样品采集名单"
 USERNAME = "root"
-PASSWORD = ""
-HOST = ""
+PASSWORD = "cyst1Q!Q"
+HOST = "8.135.110.238"
 PORT = 22
 work_b = openpyxl.load_workbook(data_path)
 wb = work_b.active
@@ -27,18 +27,22 @@ sftp = paramiko.SFTPClient.from_transport(trans)
 while True:
     try:
         n = 1
-
         for one_row in range(2, rows + 1):
-            key_value = wb[f"C{one_row}"].value  # 编码
-            quxian_value = wb[f"M{one_row}"].value  # 区县
-            local_dir_path_quxian = os.path.join(local_dir, quxian_value)  # 图片本地存放文件夹
-            local_dir_path = os.path.join(local_dir_path_quxian, key_value)  # 图片本地存放文件夹
-            adres_value = wb[f"E{one_row}"].value  # 方位
+            provice = wb[f"A{one_row}"].value  # 省
+            city = wb[f"B{one_row}"].value  # 市
+            county = wb[f"C{one_row}"].value  # 区县
+            project = wb[f"D{one_row}"].value  # 项目名称
+            town = wb[f"E{one_row}"].value  # 乡镇
+            village = wb[f"F{one_row}"].value  # 村
+            path_value = wb[f"G{one_row}"].value  # 路径
+            adres_value = wb[f"H{one_row}"].value  # 方位
+            key_value = wb[f"I{one_row}"].value  # 编码
+            local_dir_path = os.path.join(local_dir, "%s/%s/%s/%s/%s/%s/%s" % (
+            provice, city, county, project, town, village, key_value))  # 图片本地存放文件夹
             if os.path.exists(local_dir_path):
                 pass
             else:
                 os.makedirs(local_dir_path)
-            path_value = wb[f"D{one_row}"].value  # 路径
             path_value_path = str(path_value).replace("/files", "/mnt/uploaded_files")  # 服务器图片路径
             local_pic_name = key_value + "_" + adres_dict[adres_value] + ".jpg"  # 本地图片name
             local_pic_path = os.path.join(local_dir_path, local_pic_name)  # 本地图片绝对路径
