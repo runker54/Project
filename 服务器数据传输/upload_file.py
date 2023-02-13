@@ -9,11 +9,11 @@ import datetime
 import time
 import os
 import random
-hostname = '120.77.46.249'
+hostname = ''
 
-username = 'root'
+username = ''
 
-password = 'runker54.++'
+password = ''
 
 port = 22  # 配置信息可以写到配置文件中
 client = paramiko.SSHClient()
