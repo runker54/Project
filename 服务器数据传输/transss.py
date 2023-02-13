@@ -9,9 +9,9 @@ import openpyxl
 
 data_path = r"C:\Users\65680\Desktop\样品采集名单\地址表格20211129.xlsx"
 local_dir = r"C:\Users\65680\Desktop\样品采集名单"
-USERNAME = "root"
-PASSWORD = "cyst1Q!Q"
-HOST = "8.135.110.238"
+USERNAME = ""
+PASSWORD = ""
+HOST = ""
 PORT = 22
 work_b = openpyxl.load_workbook(data_path)
 wb = work_b.active
